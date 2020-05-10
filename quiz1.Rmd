@@ -1,0 +1,111 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Quiz 1
+
+## Setup
+
+```{r install_packages, results="hide", warning=FALSE, eval=FALSE}
+install.packages(c("devtools"))
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+
+BiocManager::install("Biobase")
+BiocManager::install("GenomicRanges")
+BiocManager::install("SummarizedExperiment")
+```
+
+```{r load}
+library(SummarizedExperiment)
+library(Biobase)
+library(GenomicRanges)
+```
+
+
+#### Testing the cache
+
+```{r setup, eval=TRUE}
+knitr::opts_chunk$set(cache=FALSE)
+```
+
+```{r}
+x = rnorm(10)
+plot(x,pch=19,col="dodgerblue")
+```
+
+```{r}
+y = rbinom(20,size=1,prob=0.5)
+table(y)
+```
+
+#### Working with SummarizedExperiment obj
+
+```{r}
+library(Biobase)
+library(GenomicRanges)
+data(sample.ExpressionSet, package = "Biobase")
+se = makeSummarizedExperimentFromExpressionSet(sample.ExpressionSet)
+```
+
+```{r}
+assay(se)
+```
+
+```{r}
+# phenotype data
+colData(se)
+```
+
+```{r}
+# shows the name of the genes that are being expressed. No data.  Returns a data fram
+rowData(se)
+```
+```{r}
+rowRanges(se)
+```
+
+```{r se_helpers, results="hide"}
+dim(se)
+dimnames(se)
+```
+
+### Experimental Design - Bottomly and Bodymap
+
+```{r load_bot_bm}
+con =url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bottomly_eset.RData")
+load(file=con)
+close(con)
+bot = bottomly.eset
+pdata_bot=pData(bot)
+
+con =url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bodymap_eset.RData")
+load(file=con)
+close(con)
+bm = bodymap.eset
+pdata_bm=pData(bm)
+```
+
+
+
+
+## Session information
+
+Here is the session information 
+
+```{r session_info}
+devtools::session_info()
+```
+
+It is also useful to compile the time the document was processed. This document was processed on: `r Sys.Date()`.
+
+## R Notebook Commands
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
