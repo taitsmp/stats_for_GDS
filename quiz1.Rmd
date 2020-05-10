@@ -51,6 +51,7 @@ se = makeSummarizedExperimentFromExpressionSet(sample.ExpressionSet)
 ```
 
 ```{r}
+# genes (rows) x samples (columns).  Cells are expression values (normalized?)
 assay(se)
 ```
 
@@ -88,7 +89,17 @@ bm = bodymap.eset
 pdata_bm=pData(bm)
 ```
 
+### Graphing Bodymap
 
+```{r}
+library(plotrix)
+pie3D(pdata_bm$num.tech.reps,labels=pdata_bm$tissue.type)
+```
+
+
+```{r}
+edata = exprs(bm)
+```
 
 
 ## Session information
