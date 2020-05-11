@@ -96,9 +96,41 @@ library(plotrix)
 pie3D(pdata_bm$num.tech.reps,labels=pdata_bm$tissue.type)
 ```
 
+### Bodymap Heatmaps
 
 ```{r}
 edata = exprs(bm)
+```
+
+```{r}
+
+row_sums = rowSums(edata)
+edata = edata[order(-row_sums),]
+index = 1:500
+heatmap(edata[index,],Rowv=NA,Colv=NA)
+```
+
+```{r}
+edata = exprs(bm)
+row_sums = rowSums(edata)
+index = which(rank(row_sums) < 500 )
+dim(index)
+heatmap(edata[index,],Colv=NA)
+```
+
+```{r}
+edata = exprs(bm)
+row_sums = rowSums(edata)
+edata = edata[order(row_sums),]
+index = which(rank(-row_sums) < 500)
+heatmap(edata[index,],Rowv=NA, Colv=NA)
+```
+
+```{r}
+edata = exprs(bm)
+row_sums = rowSums(edata)
+index = which(rank(-row_sums) < 500 )
+heatmap(edata[index,],Rowv=NA,Colv=NA)
 ```
 
 
