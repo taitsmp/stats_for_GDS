@@ -98,14 +98,12 @@ pie3D(pdata_bm$num.tech.reps,labels=pdata_bm$tissue.type)
 
 ### Bodymap Heatmaps
 
+Which of the following code chunks will make a heatmap of the 500 most highly expressed genes (as defined by total count), without re-ordering due to clustering?
+
 ```{r}
 edata = exprs(bm)
-```
-
-```{r}
-
 row_sums = rowSums(edata)
-edata = edata[order(-row_sums),]
+edata = edata[order(-row_sums),] #this reorders the rows
 index = 1:500
 heatmap(edata[index,],Rowv=NA,Colv=NA)
 ```
@@ -113,24 +111,53 @@ heatmap(edata[index,],Rowv=NA,Colv=NA)
 ```{r}
 edata = exprs(bm)
 row_sums = rowSums(edata)
-index = which(rank(row_sums) < 500 )
-dim(index)
+index = which(rank(row_sums) < 500 ) #no row_sums are less than 500. 
+#dim(index)
 heatmap(edata[index,],Colv=NA)
 ```
 
 ```{r}
 edata = exprs(bm)
 row_sums = rowSums(edata)
-edata = edata[order(row_sums),]
+edata = edata[order(row_sums),] #reorder rows. Ascending order. 
 index = which(rank(-row_sums) < 500)
-heatmap(edata[index,],Rowv=NA, Colv=NA)
+heatmap(edata[index,],Rowv=NA, Colv=NA) #not sure why this failed. 
 ```
 
 ```{r}
 edata = exprs(bm)
 row_sums = rowSums(edata)
-index = which(rank(-row_sums) < 500 )
+index = which(rank(-row_sums) < 500 ) #rank has nothing to do with "rank" in linear algebra. It give you the indexes of the matrix in ascending order. 
 heatmap(edata[index,],Rowv=NA,Colv=NA)
+```
+### Bodymap graphs
+
+Make an MA-plot of the first sample versus the second sample using the **log2** transform (hint: you may have to add 1 first) and the **rlog** transform from the DESeq2 package. How are the two MA-plots different? Which kind of genes appear most different in each plot?
+
+
+```{r}
+con =url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bodymap_eset.RData")
+load(file=con)
+close(con)
+bm = bodymap.eset
+pdata = pData(bm)
+edata = exprs(bm)
+fdata = fData(bm)
+
+#Now make the graph. 
+#sample1 vs. #sample2 with log2 transform. 
+par(pch=19)
+```
+
+Bonus exploratory data analysis
+
+```{r}
+
+table(pdata$gender, pdata$tissue.type) #super sparse. 
+table(pdata$gender, pdata$race)
+
+summary(edata)
+
 ```
 
 
