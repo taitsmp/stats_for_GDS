@@ -149,7 +149,24 @@ fdata = fData(bm)
 par(pch=19)
 ```
 
-Bonus exploratory data analysis
+#### MA-plot
+
+https://en.wikipedia.org/wiki/MA_plot
+
+```{r}
+sample1 = edata[,1]
+sample2 = edata[,2]
+
+sdiff = log2(sample1 + 1) - log2(sample2 + 1)
+ssum  = log2(sample1 + 1) + log2(sample2 + 1)
+
+plot(ssum, sdiff, col=2, xlab="A", ylab="M")
+title("MA Plot")
+
+```
+
+
+### Bonus exploratory data analysis
 
 ```{r}
 
