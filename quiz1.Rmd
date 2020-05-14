@@ -151,15 +151,17 @@ par(pch=19)
 
 #### MA-plots
 
-Make an MA-plot of the first sample versus the second sample using the `log2` transform (hint: you may have to add 1 first) and the `rlog` transform from the DESeq2 package. How are the two MA-plots different? Which kind of genes appear most different in each plot?
+Make an MA-plot of the first sample versus the second sample using the `log2` transform (hint: you may have to add mple1 + 11 first) and the `rlog` transform from the DESeq2 package. How are the two MA-plots different? Which kind of genes appear most different in each plot?
 
 https://en.wikipedia.org/wiki/MA_plot
 
 ```{r}
+edata = exprs(bm)
+
 sample1 = edata[,1]
 sample2 = edata[,2]
 
-sdiff = log2(sample1 + 1) - log2(sample2 + 1)
+sdiff = log2(sa) - log2(sample2 + 1)
 ssum  = log2(sample1 + 1) + log2(sample2 + 1)
 
 plot(ssum, sdiff, col=2, xlab="A", ylab="M")
@@ -168,6 +170,9 @@ title("MA Plot")
 ```
 ### DESeq2 - rlog
 
+* https://www.bioconductor.org/help/course-materials/2015/LearnBioconductorFeb2015/B02.1.1_RNASeqLab.html
+
+
 ```{r install_deseq2, eval=FALSE}
 BiocManager::install("DESeq2")
 ```
@@ -175,9 +180,23 @@ BiocManager::install("DESeq2")
 ```{r}
 library(DESeq2)
 ```
+```{r}
+# https://www.bioconductor.org/help/course-materials/2015/LearnBioconductorFeb2015/B02.1.1_RNASeqLab.html
+#This produces -Inf for zero values but might work.
+de_edata = rlog(data.matrix(edata))
+
+#we could just add one to all cells. 
+de_edata = rlog(data.matrix(edata+1))
+
+sde1 = de_edata[,1]
+sde2 = de_edata[,2]
+
+```
+
+
 Todo:
 
-* conver edata to a matrix?
+* convert edata to a matrix?
   + data.matrix
   + DESeqDataSetFromMatrix
   + consider watching data exploration videos again. 
