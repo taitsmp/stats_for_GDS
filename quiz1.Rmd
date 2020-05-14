@@ -149,7 +149,9 @@ fdata = fData(bm)
 par(pch=19)
 ```
 
-#### MA-plot
+#### MA-plots
+
+Make an MA-plot of the first sample versus the second sample using the `log2` transform (hint: you may have to add 1 first) and the `rlog` transform from the DESeq2 package. How are the two MA-plots different? Which kind of genes appear most different in each plot?
 
 https://en.wikipedia.org/wiki/MA_plot
 
@@ -164,6 +166,35 @@ plot(ssum, sdiff, col=2, xlab="A", ylab="M")
 title("MA Plot")
 
 ```
+### DESeq2 - rlog
+
+```{r install_deseq2, eval=FALSE}
+BiocManager::install("DESeq2")
+```
+
+```{r}
+library(DESeq2)
+```
+Todo:
+
+* conver edata to a matrix?
+  + data.matrix
+  + DESeqDataSetFromMatrix
+  + consider watching data exploration videos again. 
+* make another MA plot
+
+
+
+Did both of the first two samples have the same phenotye / labels? Nope. 
+
+```{r}
+colnames(pdata)
+ps1 = pdata[1,]
+ps2 = pdata[2,]
+ps1$tissue.type
+ps2$tissue.type
+```
+
 
 
 ### Bonus exploratory data analysis
