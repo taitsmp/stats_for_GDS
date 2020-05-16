@@ -161,7 +161,7 @@ edata = exprs(bm)
 sample1 = edata[,1]
 sample2 = edata[,2]
 
-sdiff = log2(sa) - log2(sample2 + 1)
+sdiff = log2(sample1 + 1) - log2(sample2 + 1)
 ssum  = log2(sample1 + 1) + log2(sample2 + 1)
 
 plot(ssum, sdiff, col=2, xlab="A", ylab="M")
@@ -183,13 +183,19 @@ library(DESeq2)
 ```{r}
 # https://www.bioconductor.org/help/course-materials/2015/LearnBioconductorFeb2015/B02.1.1_RNASeqLab.html
 #This produces -Inf for zero values but might work.
-de_edata = rlog(data.matrix(edata))
+#de_edata = rlog(data.matrix(edata))
 
 #we could just add one to all cells. 
 de_edata = rlog(data.matrix(edata+1))
 
 sde1 = de_edata[,1]
 sde2 = de_edata[,2]
+
+ssum  = sde1 + sde2
+sdiff = sde1 - sde2
+
+plot(ssum, sdiff, col=2, xlab="A", ylab="M")
+title("MA Plot")
 
 ```
 
@@ -214,6 +220,73 @@ ps1$tissue.type
 ps2$tissue.type
 ```
 
+### Cluster the Data
+
+```{r}
+con =url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/montpick_eset.RData")
+load(file=con)
+close(con)
+mp = montpick.eset
+pdata=pData(mp)
+edata=as.data.frame(exprs(mp))
+fdata = fData(mp)
+```
+
+```{r eval=FALSE}
+install.packages('dendextend')
+install.packages("rafalib")
+```
+
+
+```{r load_de}
+  library(dendextend)
+  library(rafalib)
+```
+
+```{r}
+dim(pdata) # sample x pheno type
+dim(edata)  # gene x sample
+dim(fdata) #gene
+colnames((pdata)) #pdata has the study.
+unique(pdata$study) #only two different values. 
+pdata$study[0:10]
+tail(pdata$study, 10) 
+```
+```{r}
+is.data.frame(fdata)
+fdata$gene[1] #confuses me.
+```
+
+#### Dendograms
+
+```{r}
+edata2 = edata[rowMeans(edata) >= 100,]
+edata3 = log2(edata+1)
+```
+
+```{r}
+dist1   = dist(t(edata))
+hclust1 = hclust(dist1)
+
+```
+
+```{r}
+dend1   = as.dendrogram(hclust1)
+#plot(dend1)
+myplclust(hclust1, labels = pdata$study, lab.col = rep(1,2), hang = 0.1)
+```
+
+
+
+#### K-means
+
+Very doubtful this is what they are looking for. 
+
+```{r}
+km1 = kmeans(edata, centers=2)
+matplot(t(km1$centers), col=1:2, type="l", lwd=2) #yuck...
+```
+
 
 
 ### Bonus exploratory data analysis
@@ -226,6 +299,8 @@ table(pdata$gender, pdata$race)
 summary(edata)
 
 ```
+
+
 
 
 ## Session information
