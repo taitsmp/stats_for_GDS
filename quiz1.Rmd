@@ -271,22 +271,79 @@ hclust1 = hclust(dist1)
 ```
 
 ```{r}
-dend1   = as.dendrogram(hclust1)
-#plot(dend1)
-myplclust(hclust1, labels = pdata$study, lab.col = rep(1,2), hang = 0.1)
+ccolors = with(pdata, ifelse(study=='Montgomery', 1, 2))
+myplclust(hclust1, labels = pdata$study, lab.col = ccolors, hang = 0.1, sub="Clustering - no Normalization") 
 ```
-
-
-
-#### K-means
-
-Very doubtful this is what they are looking for. 
 
 ```{r}
-km1 = kmeans(edata, centers=2)
-matplot(t(km1$centers), col=1:2, type="l", lwd=2) #yuck...
+dist2   = dist(t(edata2))
+hclust2 = hclust(dist2)
+
 ```
 
+```{r}
+ccolors = with(pdata, ifelse(study=='Montgomery', 1, 2))
+myplclust(hclust2, labels = pdata$study, lab.col = ccolors, hang = 0.1, sub="Clustering - filter out rows with less raw counts") 
+
+```
+
+```{r}
+dist3   = dist(t(edata3))
+hclust3 = hclust(dist3)
+
+```
+```{r}
+ccolors = with(pdata, ifelse(study=='Montgomery', 1, 2))
+myplclust(hclust3, labels = pdata$study, lab.col = ccolors, hang = 0.1, sub="Clustering - rows transformed by log2 + 1") 
+```
+```{r}
+#doesn't appear to d well. 
+cutree(hclust3, 2)
+
+```
+
+
+#### K-means Clustering
+
+```{r}
+con =url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/montpick_eset.RData")
+load(file=con)
+close(con)
+mp = montpick.eset
+pdata=pData(mp)
+edata=as.data.frame(exprs(mp))
+fdata = fData(mp)
+```
+
+
+```{r}
+set.seed(1235)
+edl = log2(edata+1)
+km1 = kmeans(t(edl), centers=2) #I think I need columns to be clustered (not rows)
+matplot(km1$centers, col=1:2, type="l", lwd=2) #I guess you graph every dim of each km. 
+```
+
+```{r}
+km1$cluster
+table(km1$cluster)
+```
+
+```{r}
+ground_truth = with(pdata, ifelse(study=='Montgomery', 1, 2))
+
+#this seems to work but I need to count the FALSE values. 
+ground_truth == km1$cluster
+
+
+
+```
+
+
+```{r}
+colramp = colorRampPalette(c(3,"white",2))(9)
+#this just shows the cluster (not the study)
+heatmap(as.matrix(edl)[order(km1$cluster),], col=colramp, Colv=NA, Rowv=NA)
+```
 
 
 ### Bonus exploratory data analysis
