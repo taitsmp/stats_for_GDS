@@ -357,6 +357,45 @@ summary(edata)
 
 ```
 
+Three tables of genomic data science
+
+* expression data
+* data about patient / sample phenotypes
+* data about each gene (pathways, snps?, etc.)
+
+In R the common classes that allow you to work with the three tables
+
+* ExpressionSet
+  - assayData
+  - phenoData
+  - featureData
+
+
+```{r}
+#assume you retrieved bm and bot datasets
+# these classes use ExpressionSet and AnnotatedDataFrame
+f_bm = featureData(bm)[0:10,]
+varMetadata(f_bm)
+featureNames(f_bm)
+
+```
+
+* SummarizedExperiment
+  - assays
+  - colData
+  - rowData
+  
+
+```{r}
+#assume you loaded se
+# SummarizedExperiment
+fd_se = rowData(se)[0:10,]
+dim(fd_se) #500 x 0 - no data
+rownames(fd_se)
+
+```
+
+
 
 
 
