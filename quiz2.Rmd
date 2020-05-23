@@ -31,4 +31,9 @@ svd1 = svd(edata) #need to repeat for each of edata1,2,3
 names(svd1)
 ```
 
+Just for fun, plot the relative size of singular values.
+
+```{r}
+plot(svd1$d, ylab="Singular Value", col=2)
+```
 
