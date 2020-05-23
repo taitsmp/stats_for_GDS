@@ -1,0 +1,34 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+### Quiz 2
+
+```{r load}
+library(SummarizedExperiment)
+library(Biobase)
+library(GenomicRanges)
+```
+
+### PCA
+
+```{r}
+con =url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/montpick_eset.RData")
+load(file=con)
+close(con)
+mp = montpick.eset
+pdata=pData(mp)
+edata=as.data.frame(exprs(mp))
+fdata = fData(mp)
+```
+
+```{r}
+
+edata2 = log2(edata + 1)
+edata3 = edata2 - rowMeans(edata2) #worth checking if this is correct. 
+svd1 = svd(edata) #need to repeat for each of edata1,2,3
+names(svd1)
+```
+
+
