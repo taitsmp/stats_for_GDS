@@ -1795,6 +1795,14 @@ library(GenomicRanges)</code></pre>
 </div>
 <div id="pca" class="section level3">
 <h3>PCA</h3>
+<p>How to calculate the percent of variance?</p>
+<ul>
+<li><a href="https://stats.stackexchange.com/questions/22569/pca-and-proportion-of-variance-explained" class="uri">https://stats.stackexchange.com/questions/22569/pca-and-proportion-of-variance-explained</a></li>
+<li><a href="http://jtleek.com/genstats/inst/doc/02_03_dimension-reduction.html#look-at-the-percent-variance-explained" class="uri">http://jtleek.com/genstats/inst/doc/02_03_dimension-reduction.html#look-at-the-percent-variance-explained</a></li>
+</ul>
+<p><span class="math display">\[
+\frac{d_{ii}}{\sum_{j} d^2_{jj}}
+\]</span></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29uID11cmwoXCJodHRwOi8vYm93dGllLWJpby5zb3VyY2Vmb3JnZS5uZXQvcmVjb3VudC9FeHByZXNzaW9uU2V0cy9tb250cGlja19lc2V0LlJEYXRhXCIpXG5sb2FkKGZpbGU9Y29uKVxuY2xvc2UoY29uKVxubXAgPSBtb250cGljay5lc2V0XG5wZGF0YT1wRGF0YShtcClcbmVkYXRhPWFzLmRhdGEuZnJhbWUoZXhwcnMobXApKVxuZmRhdGEgPSBmRGF0YShtcClcbmBgYCJ9 -->
@@ -1834,9 +1842,17 @@ names(svd1)</code></pre>
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3ZkMiA9IHN2ZChlZGF0YTIpICNuZWVkIHRvIHJlcGVhdCBmb3IgZWFjaCBvZiBlZGF0YTEsMiwzXG5zdmQzID0gc3ZkKGVkYXRhMylcbmBgYCJ9 -->
+<pre class="r"><code>svd2 = svd(edata2) #need to repeat for each of edata1,2,3
+svd3 = svd(edata3)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMjIFF1aXogMgoKYGBge3IgbG9hZH0KbGlicmFyeShTdW1tYXJpemVkRXhwZXJpbWVudCkKbGlicmFyeShCaW9iYXNlKQpsaWJyYXJ5KEdlbm9taWNSYW5nZXMpCmBgYAoKIyMjIFBDQQoKYGBge3J9CmNvbiA9dXJsKCJodHRwOi8vYm93dGllLWJpby5zb3VyY2Vmb3JnZS5uZXQvcmVjb3VudC9FeHByZXNzaW9uU2V0cy9tb250cGlja19lc2V0LlJEYXRhIikKbG9hZChmaWxlPWNvbikKY2xvc2UoY29uKQptcCA9IG1vbnRwaWNrLmVzZXQKcGRhdGE9cERhdGEobXApCmVkYXRhPWFzLmRhdGEuZnJhbWUoZXhwcnMobXApKQpmZGF0YSA9IGZEYXRhKG1wKQpgYGAKCmBgYHtyfQoKZWRhdGEyID0gbG9nMihlZGF0YSArIDEpCmVkYXRhMyA9IGVkYXRhMiAtIHJvd01lYW5zKGVkYXRhMikgI3dvcnRoIGNoZWNraW5nIGlmIHRoaXMgaXMgY29ycmVjdC4gCnN2ZDEgPSBzdmQoZWRhdGEpICNuZWVkIHRvIHJlcGVhdCBmb3IgZWFjaCBvZiBlZGF0YTEsMiwzCm5hbWVzKHN2ZDEpCmBgYAoKSnVzdCBmb3IgZnVuLCBwbG90IHRoZSByZWxhdGl2ZSBzaXplIG9mIHNpbmd1bGFyIHZhbHVlcy4KCmBgYHtyfQpwbG90KHN2ZDEkZCwgeWxhYj0iU2luZ3VsYXIgVmFsdWUiLCBjb2w9MikKYGBgCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMjIFF1aXogMgoKYGBge3IgbG9hZH0KbGlicmFyeShTdW1tYXJpemVkRXhwZXJpbWVudCkKbGlicmFyeShCaW9iYXNlKQpsaWJyYXJ5KEdlbm9taWNSYW5nZXMpCmBgYAoKIyMjIFBDQQoKSG93IHRvIGNhbGN1bGF0ZSB0aGUgcGVyY2VudCBvZiB2YXJpYW5jZT8KCiogaHR0cHM6Ly9zdGF0cy5zdGFja2V4Y2hhbmdlLmNvbS9xdWVzdGlvbnMvMjI1NjkvcGNhLWFuZC1wcm9wb3J0aW9uLW9mLXZhcmlhbmNlLWV4cGxhaW5lZAoqIGh0dHA6Ly9qdGxlZWsuY29tL2dlbnN0YXRzL2luc3QvZG9jLzAyXzAzX2RpbWVuc2lvbi1yZWR1Y3Rpb24uaHRtbCNsb29rLWF0LXRoZS1wZXJjZW50LXZhcmlhbmNlLWV4cGxhaW5lZAoKJCQKXGZyYWN7ZF97aWl9fXtcc3VtX3tqfSBkXjJfe2pqfX0KJCQKCmBgYHtyfQpjb24gPXVybCgiaHR0cDovL2Jvd3RpZS1iaW8uc291cmNlZm9yZ2UubmV0L3JlY291bnQvRXhwcmVzc2lvblNldHMvbW9udHBpY2tfZXNldC5SRGF0YSIpCmxvYWQoZmlsZT1jb24pCmNsb3NlKGNvbikKbXAgPSBtb250cGljay5lc2V0CnBkYXRhPXBEYXRhKG1wKQplZGF0YT1hcy5kYXRhLmZyYW1lKGV4cHJzKG1wKSkKZmRhdGEgPSBmRGF0YShtcCkKYGBgCgpgYGB7cn0KCmVkYXRhMiA9IGxvZzIoZWRhdGEgKyAxKQplZGF0YTMgPSBlZGF0YTIgLSByb3dNZWFucyhlZGF0YTIpICN3b3J0aCBjaGVja2luZyBpZiB0aGlzIGlzIGNvcnJlY3QuIApzdmQxID0gc3ZkKGVkYXRhKSAjbmVlZCB0byByZXBlYXQgZm9yIGVhY2ggb2YgZWRhdGExLDIsMwpuYW1lcyhzdmQxKQpgYGAKCkp1c3QgZm9yIGZ1biwgcGxvdCB0aGUgcmVsYXRpdmUgc2l6ZSBvZiBzaW5ndWxhciB2YWx1ZXMuCgpgYGB7cn0KcGxvdChzdmQxJGQsIHlsYWI9IlNpbmd1bGFyIFZhbHVlIiwgY29sPTIpCmBgYAoKYGBge3J9CnN2ZDIgPSBzdmQoZWRhdGEyKSAjbmVlZCB0byByZXBlYXQgZm9yIGVhY2ggb2YgZWRhdGExLDIsMwpzdmQzID0gc3ZkKGVkYXRhMykKYGBgCgo=</div>
 
 
 

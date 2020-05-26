@@ -13,6 +13,15 @@ library(GenomicRanges)
 
 ### PCA
 
+How to calculate the percent of variance?
+
+* https://stats.stackexchange.com/questions/22569/pca-and-proportion-of-variance-explained
+* http://jtleek.com/genstats/inst/doc/02_03_dimension-reduction.html#look-at-the-percent-variance-explained
+
+$$
+\frac{d_{ii}}{\sum_{j} d^2_{jj}}
+$$
+
 ```{r}
 con =url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/montpick_eset.RData")
 load(file=con)
@@ -35,5 +44,10 @@ Just for fun, plot the relative size of singular values.
 
 ```{r}
 plot(svd1$d, ylab="Singular Value", col=2)
+```
+
+```{r}
+svd2 = svd(edata2) #need to repeat for each of edata1,2,3
+svd3 = svd(edata3)
 ```
 
