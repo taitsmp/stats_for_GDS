@@ -47,7 +47,13 @@ plot(svd1$d, ylab="Singular Value", col=2)
 ```
 
 ```{r}
-svd2 = svd(edata2) #need to repeat for each of edata1,2,3
+plot(svd1$d^2/sum(svd1$d^2),ylab="Percent Variance Explained",col=2)
+```
+
+```{r}
+svd2 = svd(edata2) 
 svd3 = svd(edata3)
 ```
+
+
 
