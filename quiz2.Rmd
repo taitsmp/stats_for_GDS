@@ -11,7 +11,7 @@ library(Biobase)
 library(GenomicRanges)
 ```
 
-### PCA
+### PCA - Question 1
 
 How to calculate the percent of variance?
 
@@ -35,7 +35,7 @@ fdata = fData(mp)
 ```{r}
 
 edata2 = log2(edata + 1)
-edata3 = edata2 - rowMeans(edata2) #worth checking if this is correct. 
+edata3 = edata2 - rowMeans(edata2)  
 svd1 = svd(edata) #need to repeat for each of edata1,2,3
 names(svd1)
 ```
@@ -55,5 +55,27 @@ svd2 = svd(edata2)
 svd3 = svd(edata3)
 ```
 
+```{r}
+plot(svd2$d^2/sum(svd2$d^2),ylab="Percent Variance Explained- edata2",col=2)
 
+```
+
+```{r}
+plot(svd3$d^2/sum(svd3$d^2),ylab="Percent Variance Explained- edata3",col=2)
+
+```
+
+#### K-means clustering + SVD correlation - Question 2 
+
+```{r}
+#log2 transform + rowmeans
+edataQ2 = log2(edata + 1) 
+edataQ2 = edataQ2 - rowMeans(edataQ2)
+```
+
+```{r clusterQ2}
+set.seed(333)
+kmQ2 = kmeans(t(edataQ2), 2)
+### LEFT OFF HERE -  need to do SVD on kmeans output
+```
 
