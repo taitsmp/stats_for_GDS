@@ -76,6 +76,32 @@ edataQ2 = edataQ2 - rowMeans(edataQ2)
 ```{r clusterQ2}
 set.seed(333)
 kmQ2 = kmeans(t(edataQ2), 2)
-### LEFT OFF HERE -  need to do SVD on kmeans output
+svdQ2 = svd(edataQ2)
 ```
+
+```{r}
+cor(svdQ2$v[,1], kmQ2$cluster)
+```
+
+### Question 3 Linear models
+
+Fit a linear model related the first gene's counts to the number of technical replicates.  Treat the number of technical replicates as a factor.
+
+See - http://jtleek.com/genstats/inst/doc/02_13_batch-effects.html
+
+```{r}
+con =url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bodymap_eset.RData")
+load(file=con)
+close(con)
+bm = bodymap.eset
+edata = exprs(bm)
+pdata_bm=pData(bm)
+```
+
+```{r}
+gene1 = as.matrix(edata[1,])
+reps = as.matrix(as.factor(pdata$num.tech.reps))
+lm <- lm.fit(gene1 ~ reps)
+```
+
 

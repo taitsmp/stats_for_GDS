@@ -1889,8 +1889,8 @@ svd3 = svd(edata3)</code></pre>
 <h4>K-means clustering + SVD correlation - Question 2</h4>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2xvZzIgdHJhbnNmb3JtICsgcm93bWVuYXNcbmVkYXRhUTIgPSBsb2cyKGVkYXRhICsgMSkgXG5lZGF0YVEyID0gZWRhdGFRMiAtIHJvd01lYW5zKGVkYXRhUTIpXG5gYGAifQ== -->
-<pre class="r"><code>#log2 transform + rowmenas
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2xvZzIgdHJhbnNmb3JtICsgcm93bWVhbnNcbmVkYXRhUTIgPSBsb2cyKGVkYXRhICsgMSkgXG5lZGF0YVEyID0gZWRhdGFRMiAtIHJvd01lYW5zKGVkYXRhUTIpXG5gYGAifQ== -->
+<pre class="r"><code>#log2 transform + rowmeans
 edataQ2 = log2(edata + 1) 
 edataQ2 = edataQ2 - rowMeans(edataQ2)</code></pre>
 <!-- rnb-source-end -->
@@ -1898,18 +1898,57 @@ edataQ2 = edataQ2 - rowMeans(edataQ2)</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMzMzKVxua21RMiA9IGttZWFucyh0KGVkYXRhUTIpLCAyKVxuIyMjIExFRlQgT0ZGIEhFUkUgLSAgbmVlZCB0byBkbyBTVkQgb24ga21lYW5zIG91dHB1dFxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoMzMzKVxua21RMiA9IGttZWFucyh0KGVkYXRhUTIpLCAyKVxuc3ZkUTIgPSBzdmQoZWRhdGFRMilcbmBgYCJ9 -->
 <pre class="r"><code>set.seed(333)
 kmQ2 = kmeans(t(edataQ2), 2)
-### LEFT OFF HERE -  need to do SVD on kmeans output</code></pre>
+svdQ2 = svd(edataQ2)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29yKHN2ZFEyJHZbLDFdLCBrbVEyJGNsdXN0ZXIpXG5gYGAifQ== -->
+<pre class="r"><code>cor(svdQ2$v[,1], kmQ2$cluster)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIC0wLjg2NzgyNDdcbiJ9 -->
+<pre><code>[1] -0.8678247</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 </div>
+</div>
+<div id="question-3-linear-models" class="section level3">
+<h3>Question 3 Linear models</h3>
+<p>Fit a linear model related the first gene’s counts to the number of technical replicates. Treat the number of technical replicates as a factor.</p>
+<p>See - <a href="http://jtleek.com/genstats/inst/doc/02_13_batch-effects.html" class="uri">http://jtleek.com/genstats/inst/doc/02_13_batch-effects.html</a></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29uID11cmwoXCJodHRwOi8vYm93dGllLWJpby5zb3VyY2Vmb3JnZS5uZXQvcmVjb3VudC9FeHByZXNzaW9uU2V0cy9ib2R5bWFwX2VzZXQuUkRhdGFcIilcbmxvYWQoZmlsZT1jb24pXG5jbG9zZShjb24pXG5ibSA9IGJvZHltYXAuZXNldFxuZWRhdGEgPSBleHBycyhibSlcbnBkYXRhX2JtPXBEYXRhKGJtKVxuYGBgIn0= -->
+<pre class="r"><code>con =url(&quot;http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bodymap_eset.RData&quot;)
+load(file=con)
+close(con)
+bm = bodymap.eset
+edata = exprs(bm)
+pdata_bm=pData(bm)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2VuZTEgPSBhcy5tYXRyaXgoZWRhdGFbMSxdKVxucmVwcyA9IGFzLm1hdHJpeChhcy5mYWN0b3IocGRhdGEkbnVtLnRlY2gucmVwcykpXG5sbSA8LSBsbS5maXQoZ2VuZTEgfiByZXBzKVxuYGBgIn0= -->
+<pre class="r"><code>gene1 = as.matrix(edata[1,])
+reps = as.matrix(as.factor(pdata$num.tech.reps))
+lm &lt;- lm.fit(gene1 ~ reps)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gbG0uZml0KGdlbmUxIH4gcmVwcykgOiAneCcgbXVzdCBiZSBhIG1hdHJpeFxuIn0= -->
+<pre><code>Error in lm.fit(gene1 ~ reps) : 'x' must be a matrix</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMjIFF1aXogMgoKYGBge3IgbG9hZH0KbGlicmFyeShTdW1tYXJpemVkRXhwZXJpbWVudCkKbGlicmFyeShCaW9iYXNlKQpsaWJyYXJ5KEdlbm9taWNSYW5nZXMpCmBgYAoKIyMjIFBDQSAtIFF1ZXN0aW9uIDEKCkhvdyB0byBjYWxjdWxhdGUgdGhlIHBlcmNlbnQgb2YgdmFyaWFuY2U/CgoqIGh0dHBzOi8vc3RhdHMuc3RhY2tleGNoYW5nZS5jb20vcXVlc3Rpb25zLzIyNTY5L3BjYS1hbmQtcHJvcG9ydGlvbi1vZi12YXJpYW5jZS1leHBsYWluZWQKKiBodHRwOi8vanRsZWVrLmNvbS9nZW5zdGF0cy9pbnN0L2RvYy8wMl8wM19kaW1lbnNpb24tcmVkdWN0aW9uLmh0bWwjbG9vay1hdC10aGUtcGVyY2VudC12YXJpYW5jZS1leHBsYWluZWQKCiQkClxmcmFje2Rfe2lpfX17XHN1bV97an0gZF4yX3tqan19CiQkCgpgYGB7cn0KY29uID11cmwoImh0dHA6Ly9ib3d0aWUtYmlvLnNvdXJjZWZvcmdlLm5ldC9yZWNvdW50L0V4cHJlc3Npb25TZXRzL21vbnRwaWNrX2VzZXQuUkRhdGEiKQpsb2FkKGZpbGU9Y29uKQpjbG9zZShjb24pCm1wID0gbW9udHBpY2suZXNldApwZGF0YT1wRGF0YShtcCkKZWRhdGE9YXMuZGF0YS5mcmFtZShleHBycyhtcCkpCmZkYXRhID0gZkRhdGEobXApCmBgYAoKYGBge3J9CgplZGF0YTIgPSBsb2cyKGVkYXRhICsgMSkKZWRhdGEzID0gZWRhdGEyIC0gcm93TWVhbnMoZWRhdGEyKSAgCnN2ZDEgPSBzdmQoZWRhdGEpICNuZWVkIHRvIHJlcGVhdCBmb3IgZWFjaCBvZiBlZGF0YTEsMiwzCm5hbWVzKHN2ZDEpCmBgYAoKSnVzdCBmb3IgZnVuLCBwbG90IHRoZSByZWxhdGl2ZSBzaXplIG9mIHNpbmd1bGFyIHZhbHVlcy4KCmBgYHtyfQpwbG90KHN2ZDEkZCwgeWxhYj0iU2luZ3VsYXIgVmFsdWUiLCBjb2w9MikKYGBgCgpgYGB7cn0KcGxvdChzdmQxJGReMi9zdW0oc3ZkMSRkXjIpLHlsYWI9IlBlcmNlbnQgVmFyaWFuY2UgRXhwbGFpbmVkIixjb2w9MikKYGBgCgpgYGB7cn0Kc3ZkMiA9IHN2ZChlZGF0YTIpIApzdmQzID0gc3ZkKGVkYXRhMykKYGBgCgpgYGB7cn0KcGxvdChzdmQyJGReMi9zdW0oc3ZkMiRkXjIpLHlsYWI9IlBlcmNlbnQgVmFyaWFuY2UgRXhwbGFpbmVkLSBlZGF0YTIiLGNvbD0yKQoKYGBgCgpgYGB7cn0KcGxvdChzdmQzJGReMi9zdW0oc3ZkMyRkXjIpLHlsYWI9IlBlcmNlbnQgVmFyaWFuY2UgRXhwbGFpbmVkLSBlZGF0YTMiLGNvbD0yKQoKYGBgCgojIyMjIEstbWVhbnMgY2x1c3RlcmluZyArIFNWRCBjb3JyZWxhdGlvbiAtIFF1ZXN0aW9uIDIgCgpgYGB7cn0KI2xvZzIgdHJhbnNmb3JtICsgcm93bWVhbnMKZWRhdGFRMiA9IGxvZzIoZWRhdGEgKyAxKSAKZWRhdGFRMiA9IGVkYXRhUTIgLSByb3dNZWFucyhlZGF0YVEyKQpgYGAKCmBgYHtyIGNsdXN0ZXJRMn0Kc2V0LnNlZWQoMzMzKQprbVEyID0ga21lYW5zKHQoZWRhdGFRMiksIDIpCiMjIyBMRUZUIE9GRiBIRVJFIC0gIG5lZWQgdG8gZG8gU1ZEIG9uIGttZWFucyBvdXRwdXQKYGBgCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMjIFF1aXogMgoKYGBge3IgbG9hZH0KbGlicmFyeShTdW1tYXJpemVkRXhwZXJpbWVudCkKbGlicmFyeShCaW9iYXNlKQpsaWJyYXJ5KEdlbm9taWNSYW5nZXMpCmBgYAoKIyMjIFBDQSAtIFF1ZXN0aW9uIDEKCkhvdyB0byBjYWxjdWxhdGUgdGhlIHBlcmNlbnQgb2YgdmFyaWFuY2U/CgoqIGh0dHBzOi8vc3RhdHMuc3RhY2tleGNoYW5nZS5jb20vcXVlc3Rpb25zLzIyNTY5L3BjYS1hbmQtcHJvcG9ydGlvbi1vZi12YXJpYW5jZS1leHBsYWluZWQKKiBodHRwOi8vanRsZWVrLmNvbS9nZW5zdGF0cy9pbnN0L2RvYy8wMl8wM19kaW1lbnNpb24tcmVkdWN0aW9uLmh0bWwjbG9vay1hdC10aGUtcGVyY2VudC12YXJpYW5jZS1leHBsYWluZWQKCiQkClxmcmFje2Rfe2lpfX17XHN1bV97an0gZF4yX3tqan19CiQkCgpgYGB7cn0KY29uID11cmwoImh0dHA6Ly9ib3d0aWUtYmlvLnNvdXJjZWZvcmdlLm5ldC9yZWNvdW50L0V4cHJlc3Npb25TZXRzL21vbnRwaWNrX2VzZXQuUkRhdGEiKQpsb2FkKGZpbGU9Y29uKQpjbG9zZShjb24pCm1wID0gbW9udHBpY2suZXNldApwZGF0YT1wRGF0YShtcCkKZWRhdGE9YXMuZGF0YS5mcmFtZShleHBycyhtcCkpCmZkYXRhID0gZkRhdGEobXApCmBgYAoKYGBge3J9CgplZGF0YTIgPSBsb2cyKGVkYXRhICsgMSkKZWRhdGEzID0gZWRhdGEyIC0gcm93TWVhbnMoZWRhdGEyKSAgCnN2ZDEgPSBzdmQoZWRhdGEpICNuZWVkIHRvIHJlcGVhdCBmb3IgZWFjaCBvZiBlZGF0YTEsMiwzCm5hbWVzKHN2ZDEpCmBgYAoKSnVzdCBmb3IgZnVuLCBwbG90IHRoZSByZWxhdGl2ZSBzaXplIG9mIHNpbmd1bGFyIHZhbHVlcy4KCmBgYHtyfQpwbG90KHN2ZDEkZCwgeWxhYj0iU2luZ3VsYXIgVmFsdWUiLCBjb2w9MikKYGBgCgpgYGB7cn0KcGxvdChzdmQxJGReMi9zdW0oc3ZkMSRkXjIpLHlsYWI9IlBlcmNlbnQgVmFyaWFuY2UgRXhwbGFpbmVkIixjb2w9MikKYGBgCgpgYGB7cn0Kc3ZkMiA9IHN2ZChlZGF0YTIpIApzdmQzID0gc3ZkKGVkYXRhMykKYGBgCgpgYGB7cn0KcGxvdChzdmQyJGReMi9zdW0oc3ZkMiRkXjIpLHlsYWI9IlBlcmNlbnQgVmFyaWFuY2UgRXhwbGFpbmVkLSBlZGF0YTIiLGNvbD0yKQoKYGBgCgpgYGB7cn0KcGxvdChzdmQzJGReMi9zdW0oc3ZkMyRkXjIpLHlsYWI9IlBlcmNlbnQgVmFyaWFuY2UgRXhwbGFpbmVkLSBlZGF0YTMiLGNvbD0yKQoKYGBgCgojIyMjIEstbWVhbnMgY2x1c3RlcmluZyArIFNWRCBjb3JyZWxhdGlvbiAtIFF1ZXN0aW9uIDIgCgpgYGB7cn0KI2xvZzIgdHJhbnNmb3JtICsgcm93bWVhbnMKZWRhdGFRMiA9IGxvZzIoZWRhdGEgKyAxKSAKZWRhdGFRMiA9IGVkYXRhUTIgLSByb3dNZWFucyhlZGF0YVEyKQpgYGAKCmBgYHtyIGNsdXN0ZXJRMn0Kc2V0LnNlZWQoMzMzKQprbVEyID0ga21lYW5zKHQoZWRhdGFRMiksIDIpCnN2ZFEyID0gc3ZkKGVkYXRhUTIpCmBgYAoKYGBge3J9CmNvcihzdmRRMiR2WywxXSwga21RMiRjbHVzdGVyKQpgYGAKCiMjIyBRdWVzdGlvbiAzIExpbmVhciBtb2RlbHMKCkZpdCBhIGxpbmVhciBtb2RlbCByZWxhdGVkIHRoZSBmaXJzdCBnZW5lJ3MgY291bnRzIHRvIHRoZSBudW1iZXIgb2YgdGVjaG5pY2FsIHJlcGxpY2F0ZXMuICBUcmVhdCB0aGUgbnVtYmVyIG9mIHRlY2huaWNhbCByZXBsaWNhdGVzIGFzIGEgZmFjdG9yLgoKU2VlIC0gaHR0cDovL2p0bGVlay5jb20vZ2Vuc3RhdHMvaW5zdC9kb2MvMDJfMTNfYmF0Y2gtZWZmZWN0cy5odG1sCgpgYGB7cn0KY29uID11cmwoImh0dHA6Ly9ib3d0aWUtYmlvLnNvdXJjZWZvcmdlLm5ldC9yZWNvdW50L0V4cHJlc3Npb25TZXRzL2JvZHltYXBfZXNldC5SRGF0YSIpCmxvYWQoZmlsZT1jb24pCmNsb3NlKGNvbikKYm0gPSBib2R5bWFwLmVzZXQKZWRhdGEgPSBleHBycyhibSkKcGRhdGFfYm09cERhdGEoYm0pCmBgYAoKYGBge3J9CmdlbmUxID0gYXMubWF0cml4KGVkYXRhWzEsXSkKcmVwcyA9IGFzLm1hdHJpeChhcy5mYWN0b3IocGRhdGEkbnVtLnRlY2gucmVwcykpCmxtIDwtIGxtLmZpdChnZW5lMSB+IHJlcHMpCmBgYAoKCg==</div>
 
 
 
