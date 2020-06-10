@@ -13,10 +13,11 @@ library(GenomicRanges)
 
 ### PCA - Question 1
 
-How to calculate the percent of variance?
+How to calculate the percent of variance explained?
 
 * https://stats.stackexchange.com/questions/22569/pca-and-proportion-of-variance-explained
 * http://jtleek.com/genstats/inst/doc/02_03_dimension-reduction.html#look-at-the-percent-variance-explained
+* http://genomicsclass.github.io/book/pages/svd.html
 
 $$
 \frac{d_{ii}}{\sum_{j} d^2_{jj}}
@@ -87,7 +88,12 @@ cor(svdQ2$v[,1], kmQ2$cluster)
 
 Fit a linear model related the first gene's counts to the number of technical replicates.  Treat the number of technical replicates as a factor.
 
-See - http://jtleek.com/genstats/inst/doc/02_13_batch-effects.html
+See 
+
+* http://jtleek.com/genstats/inst/doc/02_13_batch-effects.html
+* https://genomicsclass.github.io/book/pages/adjusting_with_linear_models.html
+* https://genomicsclass.github.io/book/pages/eda_with_pca.html
+* https://genomicsclass.github.io/book/pages/expressing_design_formula.html
 
 ```{r}
 con =url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bodymap_eset.RData")
@@ -99,9 +105,24 @@ pdata_bm=pData(bm)
 ```
 
 ```{r}
-gene1 = as.matrix(edata[1,])
-reps = as.matrix(as.factor(pdata$num.tech.reps))
-lm <- lm.fit(gene1 ~ reps)
+#gene1 = as.matrix(edata[1,])
+#reps = as.matrix(as.factor(pdata$num.tech.reps))
+#lm <- lm.fit(gene1 ~ reps)
+
+mod = model.matrix(~ as.factor(num.tech.reps), data=pdata_bm)
+fit = lm.fit(mod, t(edata))
 ```
 
+Plot the data for this gene versus the covariate. Can you think of why this model might not fit well?
+
+```{r}
+#3 rows by 52k cols. Look in the first column for data about the first gene
+dim(fit$coefficients)
+
+#why three coefficients?
+fit$coefficients[,1]
+
+#what should I plot? Historgram or linear model? In video lecture about correcting for batch effects a histogram is plotted first. 
+
+```
 

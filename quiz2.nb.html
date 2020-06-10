@@ -1795,10 +1795,11 @@ library(GenomicRanges)</code></pre>
 </div>
 <div id="pca---question-1" class="section level3">
 <h3>PCA - Question 1</h3>
-<p>How to calculate the percent of variance?</p>
+<p>How to calculate the percent of variance explained?</p>
 <ul>
 <li><a href="https://stats.stackexchange.com/questions/22569/pca-and-proportion-of-variance-explained" class="uri">https://stats.stackexchange.com/questions/22569/pca-and-proportion-of-variance-explained</a></li>
 <li><a href="http://jtleek.com/genstats/inst/doc/02_03_dimension-reduction.html#look-at-the-percent-variance-explained" class="uri">http://jtleek.com/genstats/inst/doc/02_03_dimension-reduction.html#look-at-the-percent-variance-explained</a></li>
+<li><a href="http://genomicsclass.github.io/book/pages/svd.html" class="uri">http://genomicsclass.github.io/book/pages/svd.html</a></li>
 </ul>
 <p><span class="math display">\[
 \frac{d_{ii}}{\sum_{j} d^2_{jj}}
@@ -1920,7 +1921,13 @@ svdQ2 = svd(edataQ2)</code></pre>
 <div id="question-3-linear-models" class="section level3">
 <h3>Question 3 Linear models</h3>
 <p>Fit a linear model related the first gene’s counts to the number of technical replicates. Treat the number of technical replicates as a factor.</p>
-<p>See - <a href="http://jtleek.com/genstats/inst/doc/02_13_batch-effects.html" class="uri">http://jtleek.com/genstats/inst/doc/02_13_batch-effects.html</a></p>
+<p>See</p>
+<ul>
+<li><a href="http://jtleek.com/genstats/inst/doc/02_13_batch-effects.html" class="uri">http://jtleek.com/genstats/inst/doc/02_13_batch-effects.html</a></li>
+<li><a href="https://genomicsclass.github.io/book/pages/adjusting_with_linear_models.html" class="uri">https://genomicsclass.github.io/book/pages/adjusting_with_linear_models.html</a></li>
+<li><a href="https://genomicsclass.github.io/book/pages/eda_with_pca.html" class="uri">https://genomicsclass.github.io/book/pages/eda_with_pca.html</a></li>
+<li><a href="https://genomicsclass.github.io/book/pages/expressing_design_formula.html" class="uri">https://genomicsclass.github.io/book/pages/expressing_design_formula.html</a></li>
+</ul>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29uID11cmwoXCJodHRwOi8vYm93dGllLWJpby5zb3VyY2Vmb3JnZS5uZXQvcmVjb3VudC9FeHByZXNzaW9uU2V0cy9ib2R5bWFwX2VzZXQuUkRhdGFcIilcbmxvYWQoZmlsZT1jb24pXG5jbG9zZShjb24pXG5ibSA9IGJvZHltYXAuZXNldFxuZWRhdGEgPSBleHBycyhibSlcbnBkYXRhX2JtPXBEYXRhKGJtKVxuYGBgIn0= -->
@@ -1935,20 +1942,35 @@ pdata_bm=pData(bm)</code></pre>
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2VuZTEgPSBhcy5tYXRyaXgoZWRhdGFbMSxdKVxucmVwcyA9IGFzLm1hdHJpeChhcy5mYWN0b3IocGRhdGEkbnVtLnRlY2gucmVwcykpXG5sbSA8LSBsbS5maXQoZ2VuZTEgfiByZXBzKVxuYGBgIn0= -->
-<pre class="r"><code>gene1 = as.matrix(edata[1,])
-reps = as.matrix(as.factor(pdata$num.tech.reps))
-lm &lt;- lm.fit(gene1 ~ reps)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2dlbmUxID0gYXMubWF0cml4KGVkYXRhWzEsXSlcbiNyZXBzID0gYXMubWF0cml4KGFzLmZhY3RvcihwZGF0YSRudW0udGVjaC5yZXBzKSlcbiNsbSA8LSBsbS5maXQoZ2VuZTEgfiByZXBzKVxuXG5tb2QgPSBtb2RlbC5tYXRyaXgofiBhcy5mYWN0b3IobnVtLnRlY2gucmVwcyksIGRhdGE9cGRhdGFfYm0pXG5maXQgPSBsbS5maXQobW9kLCB0KGVkYXRhKSlcbmBgYCJ9 -->
+<pre class="r"><code>#gene1 = as.matrix(edata[1,])
+#reps = as.matrix(as.factor(pdata$num.tech.reps))
+#lm &lt;- lm.fit(gene1 ~ reps)
+
+mod = model.matrix(~ as.factor(num.tech.reps), data=pdata_bm)
+fit = lm.fit(mod, t(edata))</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gbG0uZml0KGdlbmUxIH4gcmVwcykgOiAneCcgbXVzdCBiZSBhIG1hdHJpeFxuIn0= -->
-<pre><code>Error in lm.fit(gene1 ~ reps) : 'x' must be a matrix</code></pre>
-<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Plot the data for this gene versus the covariate. Can you think of why this model might not fit well?</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIzMgcm93cyBieSA1MmsgY29scy4gTG9vayBpbiB0aGUgZmlyc3QgY29sdW1uIGZvciBkYXRhIGFib3V0IHRoZSBmaXJzdCBnZW5lXG5kaW0oZml0JGNvZWZmaWNpZW50cylcblxuI3doeSB0aHJlZSBjb2VmZmljaWVudHM/XG5maXQkY29lZmZpY2llbnRzWywxXVxuXG4jd2hhdCBzaG91bGQgSSBwbG90PyBIaXN0b3JncmFtIG9yIGxpbmVhciBtb2RlbD8gSW4gdmlkZW8gbGVjdHVyZSBhYm91dCBjb3JyZWN0aW5nIGZvciBiYXRjaCBlZmZlY3RzIGEgaGlzdG9ncmFtIGlzIHBsb3R0ZWQgZmlyc3QuIFxuXG5gYGAifQ== -->
+<pre class="r"><code>#3 rows by 52k cols. Look in the first column for data about the first gene
+dim(fit$coefficients)
+
+#why three coefficients?
+fit$coefficients[,1]
+
+#what should I plot? Historgram or linear model? In video lecture about correcting for batch effects a histogram is plotted first. 
+</code></pre>
+<!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMjIFF1aXogMgoKYGBge3IgbG9hZH0KbGlicmFyeShTdW1tYXJpemVkRXhwZXJpbWVudCkKbGlicmFyeShCaW9iYXNlKQpsaWJyYXJ5KEdlbm9taWNSYW5nZXMpCmBgYAoKIyMjIFBDQSAtIFF1ZXN0aW9uIDEKCkhvdyB0byBjYWxjdWxhdGUgdGhlIHBlcmNlbnQgb2YgdmFyaWFuY2U/CgoqIGh0dHBzOi8vc3RhdHMuc3RhY2tleGNoYW5nZS5jb20vcXVlc3Rpb25zLzIyNTY5L3BjYS1hbmQtcHJvcG9ydGlvbi1vZi12YXJpYW5jZS1leHBsYWluZWQKKiBodHRwOi8vanRsZWVrLmNvbS9nZW5zdGF0cy9pbnN0L2RvYy8wMl8wM19kaW1lbnNpb24tcmVkdWN0aW9uLmh0bWwjbG9vay1hdC10aGUtcGVyY2VudC12YXJpYW5jZS1leHBsYWluZWQKCiQkClxmcmFje2Rfe2lpfX17XHN1bV97an0gZF4yX3tqan19CiQkCgpgYGB7cn0KY29uID11cmwoImh0dHA6Ly9ib3d0aWUtYmlvLnNvdXJjZWZvcmdlLm5ldC9yZWNvdW50L0V4cHJlc3Npb25TZXRzL21vbnRwaWNrX2VzZXQuUkRhdGEiKQpsb2FkKGZpbGU9Y29uKQpjbG9zZShjb24pCm1wID0gbW9udHBpY2suZXNldApwZGF0YT1wRGF0YShtcCkKZWRhdGE9YXMuZGF0YS5mcmFtZShleHBycyhtcCkpCmZkYXRhID0gZkRhdGEobXApCmBgYAoKYGBge3J9CgplZGF0YTIgPSBsb2cyKGVkYXRhICsgMSkKZWRhdGEzID0gZWRhdGEyIC0gcm93TWVhbnMoZWRhdGEyKSAgCnN2ZDEgPSBzdmQoZWRhdGEpICNuZWVkIHRvIHJlcGVhdCBmb3IgZWFjaCBvZiBlZGF0YTEsMiwzCm5hbWVzKHN2ZDEpCmBgYAoKSnVzdCBmb3IgZnVuLCBwbG90IHRoZSByZWxhdGl2ZSBzaXplIG9mIHNpbmd1bGFyIHZhbHVlcy4KCmBgYHtyfQpwbG90KHN2ZDEkZCwgeWxhYj0iU2luZ3VsYXIgVmFsdWUiLCBjb2w9MikKYGBgCgpgYGB7cn0KcGxvdChzdmQxJGReMi9zdW0oc3ZkMSRkXjIpLHlsYWI9IlBlcmNlbnQgVmFyaWFuY2UgRXhwbGFpbmVkIixjb2w9MikKYGBgCgpgYGB7cn0Kc3ZkMiA9IHN2ZChlZGF0YTIpIApzdmQzID0gc3ZkKGVkYXRhMykKYGBgCgpgYGB7cn0KcGxvdChzdmQyJGReMi9zdW0oc3ZkMiRkXjIpLHlsYWI9IlBlcmNlbnQgVmFyaWFuY2UgRXhwbGFpbmVkLSBlZGF0YTIiLGNvbD0yKQoKYGBgCgpgYGB7cn0KcGxvdChzdmQzJGReMi9zdW0oc3ZkMyRkXjIpLHlsYWI9IlBlcmNlbnQgVmFyaWFuY2UgRXhwbGFpbmVkLSBlZGF0YTMiLGNvbD0yKQoKYGBgCgojIyMjIEstbWVhbnMgY2x1c3RlcmluZyArIFNWRCBjb3JyZWxhdGlvbiAtIFF1ZXN0aW9uIDIgCgpgYGB7cn0KI2xvZzIgdHJhbnNmb3JtICsgcm93bWVhbnMKZWRhdGFRMiA9IGxvZzIoZWRhdGEgKyAxKSAKZWRhdGFRMiA9IGVkYXRhUTIgLSByb3dNZWFucyhlZGF0YVEyKQpgYGAKCmBgYHtyIGNsdXN0ZXJRMn0Kc2V0LnNlZWQoMzMzKQprbVEyID0ga21lYW5zKHQoZWRhdGFRMiksIDIpCnN2ZFEyID0gc3ZkKGVkYXRhUTIpCmBgYAoKYGBge3J9CmNvcihzdmRRMiR2WywxXSwga21RMiRjbHVzdGVyKQpgYGAKCiMjIyBRdWVzdGlvbiAzIExpbmVhciBtb2RlbHMKCkZpdCBhIGxpbmVhciBtb2RlbCByZWxhdGVkIHRoZSBmaXJzdCBnZW5lJ3MgY291bnRzIHRvIHRoZSBudW1iZXIgb2YgdGVjaG5pY2FsIHJlcGxpY2F0ZXMuICBUcmVhdCB0aGUgbnVtYmVyIG9mIHRlY2huaWNhbCByZXBsaWNhdGVzIGFzIGEgZmFjdG9yLgoKU2VlIC0gaHR0cDovL2p0bGVlay5jb20vZ2Vuc3RhdHMvaW5zdC9kb2MvMDJfMTNfYmF0Y2gtZWZmZWN0cy5odG1sCgpgYGB7cn0KY29uID11cmwoImh0dHA6Ly9ib3d0aWUtYmlvLnNvdXJjZWZvcmdlLm5ldC9yZWNvdW50L0V4cHJlc3Npb25TZXRzL2JvZHltYXBfZXNldC5SRGF0YSIpCmxvYWQoZmlsZT1jb24pCmNsb3NlKGNvbikKYm0gPSBib2R5bWFwLmVzZXQKZWRhdGEgPSBleHBycyhibSkKcGRhdGFfYm09cERhdGEoYm0pCmBgYAoKYGBge3J9CmdlbmUxID0gYXMubWF0cml4KGVkYXRhWzEsXSkKcmVwcyA9IGFzLm1hdHJpeChhcy5mYWN0b3IocGRhdGEkbnVtLnRlY2gucmVwcykpCmxtIDwtIGxtLmZpdChnZW5lMSB+IHJlcHMpCmBgYAoKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMjIFF1aXogMgoKYGBge3IgbG9hZH0KbGlicmFyeShTdW1tYXJpemVkRXhwZXJpbWVudCkKbGlicmFyeShCaW9iYXNlKQpsaWJyYXJ5KEdlbm9taWNSYW5nZXMpCmBgYAoKIyMjIFBDQSAtIFF1ZXN0aW9uIDEKCkhvdyB0byBjYWxjdWxhdGUgdGhlIHBlcmNlbnQgb2YgdmFyaWFuY2UgZXhwbGFpbmVkPwoKKiBodHRwczovL3N0YXRzLnN0YWNrZXhjaGFuZ2UuY29tL3F1ZXN0aW9ucy8yMjU2OS9wY2EtYW5kLXByb3BvcnRpb24tb2YtdmFyaWFuY2UtZXhwbGFpbmVkCiogaHR0cDovL2p0bGVlay5jb20vZ2Vuc3RhdHMvaW5zdC9kb2MvMDJfMDNfZGltZW5zaW9uLXJlZHVjdGlvbi5odG1sI2xvb2stYXQtdGhlLXBlcmNlbnQtdmFyaWFuY2UtZXhwbGFpbmVkCiogaHR0cDovL2dlbm9taWNzY2xhc3MuZ2l0aHViLmlvL2Jvb2svcGFnZXMvc3ZkLmh0bWwKCiQkClxmcmFje2Rfe2lpfX17XHN1bV97an0gZF4yX3tqan19CiQkCgpgYGB7cn0KY29uID11cmwoImh0dHA6Ly9ib3d0aWUtYmlvLnNvdXJjZWZvcmdlLm5ldC9yZWNvdW50L0V4cHJlc3Npb25TZXRzL21vbnRwaWNrX2VzZXQuUkRhdGEiKQpsb2FkKGZpbGU9Y29uKQpjbG9zZShjb24pCm1wID0gbW9udHBpY2suZXNldApwZGF0YT1wRGF0YShtcCkKZWRhdGE9YXMuZGF0YS5mcmFtZShleHBycyhtcCkpCmZkYXRhID0gZkRhdGEobXApCmBgYAoKYGBge3J9CgplZGF0YTIgPSBsb2cyKGVkYXRhICsgMSkKZWRhdGEzID0gZWRhdGEyIC0gcm93TWVhbnMoZWRhdGEyKSAgCnN2ZDEgPSBzdmQoZWRhdGEpICNuZWVkIHRvIHJlcGVhdCBmb3IgZWFjaCBvZiBlZGF0YTEsMiwzCm5hbWVzKHN2ZDEpCmBgYAoKSnVzdCBmb3IgZnVuLCBwbG90IHRoZSByZWxhdGl2ZSBzaXplIG9mIHNpbmd1bGFyIHZhbHVlcy4KCmBgYHtyfQpwbG90KHN2ZDEkZCwgeWxhYj0iU2luZ3VsYXIgVmFsdWUiLCBjb2w9MikKYGBgCgpgYGB7cn0KcGxvdChzdmQxJGReMi9zdW0oc3ZkMSRkXjIpLHlsYWI9IlBlcmNlbnQgVmFyaWFuY2UgRXhwbGFpbmVkIixjb2w9MikKYGBgCgpgYGB7cn0Kc3ZkMiA9IHN2ZChlZGF0YTIpIApzdmQzID0gc3ZkKGVkYXRhMykKYGBgCgpgYGB7cn0KcGxvdChzdmQyJGReMi9zdW0oc3ZkMiRkXjIpLHlsYWI9IlBlcmNlbnQgVmFyaWFuY2UgRXhwbGFpbmVkLSBlZGF0YTIiLGNvbD0yKQoKYGBgCgpgYGB7cn0KcGxvdChzdmQzJGReMi9zdW0oc3ZkMyRkXjIpLHlsYWI9IlBlcmNlbnQgVmFyaWFuY2UgRXhwbGFpbmVkLSBlZGF0YTMiLGNvbD0yKQoKYGBgCgojIyMjIEstbWVhbnMgY2x1c3RlcmluZyArIFNWRCBjb3JyZWxhdGlvbiAtIFF1ZXN0aW9uIDIgCgpgYGB7cn0KI2xvZzIgdHJhbnNmb3JtICsgcm93bWVhbnMKZWRhdGFRMiA9IGxvZzIoZWRhdGEgKyAxKSAKZWRhdGFRMiA9IGVkYXRhUTIgLSByb3dNZWFucyhlZGF0YVEyKQpgYGAKCmBgYHtyIGNsdXN0ZXJRMn0Kc2V0LnNlZWQoMzMzKQprbVEyID0ga21lYW5zKHQoZWRhdGFRMiksIDIpCnN2ZFEyID0gc3ZkKGVkYXRhUTIpCmBgYAoKYGBge3J9CmNvcihzdmRRMiR2WywxXSwga21RMiRjbHVzdGVyKQpgYGAKCiMjIyBRdWVzdGlvbiAzIExpbmVhciBtb2RlbHMKCkZpdCBhIGxpbmVhciBtb2RlbCByZWxhdGVkIHRoZSBmaXJzdCBnZW5lJ3MgY291bnRzIHRvIHRoZSBudW1iZXIgb2YgdGVjaG5pY2FsIHJlcGxpY2F0ZXMuICBUcmVhdCB0aGUgbnVtYmVyIG9mIHRlY2huaWNhbCByZXBsaWNhdGVzIGFzIGEgZmFjdG9yLgoKU2VlIAoKKiBodHRwOi8vanRsZWVrLmNvbS9nZW5zdGF0cy9pbnN0L2RvYy8wMl8xM19iYXRjaC1lZmZlY3RzLmh0bWwKKiBodHRwczovL2dlbm9taWNzY2xhc3MuZ2l0aHViLmlvL2Jvb2svcGFnZXMvYWRqdXN0aW5nX3dpdGhfbGluZWFyX21vZGVscy5odG1sCiogaHR0cHM6Ly9nZW5vbWljc2NsYXNzLmdpdGh1Yi5pby9ib29rL3BhZ2VzL2VkYV93aXRoX3BjYS5odG1sCiogaHR0cHM6Ly9nZW5vbWljc2NsYXNzLmdpdGh1Yi5pby9ib29rL3BhZ2VzL2V4cHJlc3NpbmdfZGVzaWduX2Zvcm11bGEuaHRtbAoKYGBge3J9CmNvbiA9dXJsKCJodHRwOi8vYm93dGllLWJpby5zb3VyY2Vmb3JnZS5uZXQvcmVjb3VudC9FeHByZXNzaW9uU2V0cy9ib2R5bWFwX2VzZXQuUkRhdGEiKQpsb2FkKGZpbGU9Y29uKQpjbG9zZShjb24pCmJtID0gYm9keW1hcC5lc2V0CmVkYXRhID0gZXhwcnMoYm0pCnBkYXRhX2JtPXBEYXRhKGJtKQpgYGAKCmBgYHtyfQojZ2VuZTEgPSBhcy5tYXRyaXgoZWRhdGFbMSxdKQojcmVwcyA9IGFzLm1hdHJpeChhcy5mYWN0b3IocGRhdGEkbnVtLnRlY2gucmVwcykpCiNsbSA8LSBsbS5maXQoZ2VuZTEgfiByZXBzKQoKbW9kID0gbW9kZWwubWF0cml4KH4gYXMuZmFjdG9yKG51bS50ZWNoLnJlcHMpLCBkYXRhPXBkYXRhX2JtKQpmaXQgPSBsbS5maXQobW9kLCB0KGVkYXRhKSkKYGBgCgpQbG90IHRoZSBkYXRhIGZvciB0aGlzIGdlbmUgdmVyc3VzIHRoZSBjb3ZhcmlhdGUuIENhbiB5b3UgdGhpbmsgb2Ygd2h5IHRoaXMgbW9kZWwgbWlnaHQgbm90IGZpdCB3ZWxsPwoKYGBge3J9CiMzIHJvd3MgYnkgNTJrIGNvbHMuIExvb2sgaW4gdGhlIGZpcnN0IGNvbHVtbiBmb3IgZGF0YSBhYm91dCB0aGUgZmlyc3QgZ2VuZQpkaW0oZml0JGNvZWZmaWNpZW50cykKCiN3aHkgdGhyZWUgY29lZmZpY2llbnRzPwpmaXQkY29lZmZpY2llbnRzWywxXQoKI3doYXQgc2hvdWxkIEkgcGxvdD8gSGlzdG9yZ3JhbSBvciBsaW5lYXIgbW9kZWw/IEluIHZpZGVvIGxlY3R1cmUgYWJvdXQgY29ycmVjdGluZyBmb3IgYmF0Y2ggZWZmZWN0cyBhIGhpc3RvZ3JhbSBpcyBwbG90dGVkIGZpcnN0LiAKCmBgYAoK</div>
 
 
 
