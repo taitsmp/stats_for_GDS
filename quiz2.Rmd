@@ -91,9 +91,13 @@ Fit a linear model related the first gene's counts to the number of technical re
 See 
 
 * http://jtleek.com/genstats/inst/doc/02_13_batch-effects.html
+* http://jtleek.com/genstats/inst/doc/02_08_poverty-example.html
+* http://jtleek.com/genstats/inst/doc/02_11_many-regressions.html
+* http://jtleek.com/genstats/inst/doc/02_06_galton-example.html
 * https://genomicsclass.github.io/book/pages/adjusting_with_linear_models.html
 * https://genomicsclass.github.io/book/pages/eda_with_pca.html
 * https://genomicsclass.github.io/book/pages/expressing_design_formula.html
+
 
 ```{r}
 con =url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/bodymap_eset.RData")
@@ -124,5 +128,7 @@ fit$coefficients[,1]
 
 #what should I plot? Historgram or linear model? In video lecture about correcting for batch effects a histogram is plotted first. 
 
+# histogram would likely be gene expression level on y axis and num technical replicates n x-axis.  This would be the same setup for a linear model. 
+plot(pdata_bm$num.tech.reps, edata[1,])
 ```
 
