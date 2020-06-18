@@ -56,6 +56,8 @@ svd2 = svd(edata2)
 svd3 = svd(edata3)
 ```
 
+
+
 ```{r}
 plot(svd2$d^2/sum(svd2$d^2),ylab="Percent Variance Explained- edata2",col=2)
 
@@ -65,6 +67,8 @@ plot(svd2$d^2/sum(svd2$d^2),ylab="Percent Variance Explained- edata2",col=2)
 plot(svd3$d^2/sum(svd3$d^2),ylab="Percent Variance Explained- edata3",col=2)
 
 ```
+
+One thing to remember, SVD can flip signs.  
 
 #### K-means clustering + SVD correlation - Question 2 
 
@@ -130,5 +134,15 @@ fit$coefficients[,1]
 
 # histogram would likely be gene expression level on y axis and num technical replicates n x-axis.  This would be the same setup for a linear model. 
 plot(pdata_bm$num.tech.reps, edata[1,])
+```
+Just for fun,  let's plot this with ggplot
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+df <- data.frame(ensg = edata[1,], num.tech.reps = pdata_bm$num.tech.reps)
+ggplot(data=df, aes(y=ensg, x = num.tech.reps)) + geom_point() + geom_smooth(method="lm", color="red", linetype=2, formula="y~x")
 ```
 
