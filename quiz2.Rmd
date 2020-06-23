@@ -9,6 +9,7 @@ output: html_notebook
 library(SummarizedExperiment)
 library(Biobase)
 library(GenomicRanges)
+library(broom)
 ```
 
 ### PCA - Question 1
@@ -123,6 +124,22 @@ fit = lm.fit(mod, t(edata))
 
 Plot the data for this gene versus the covariate. Can you think of why this model might not fit well?
 
+* The data are right skewed.
+
+Right skewed distributions would have a long tail on the RHS. They would also show Mode <= Median <= Mean.  There is so little data here I have mixed feelings as to whether I'd categorize this as a true right skewed distribution.  Also, we're just talking about a histogram of counts for `num.tech.reps` so I'm not sure if that qualifies for "the data".  
+
+* There is only one data point with a value of 6 so it is likely that the estimated value for that number of technical replicates is highly variable.
+
+Certainly the value for 6 rechnical replicates would be more variable. I'm not sure that explains why the fit is off.  So far, I'd pick this answer. 
+
+* There may be different numbers of counts for different numbers of technical replicates.
+
+What does "numbers of counts" mean?  I would assume absolute count values are divided by the numbder of technical replicates. I'm not sure what this answer is stating. 
+
+* The difference between 2 and 5 technical replicates is not the same as the difference between 5 and 6 technical replicates.
+
+There is certainly a gap in data between 2 and 5. 5 and 6 are much closer  Does that explain why the fit might be off? No. 
+
 ```{r}
 #3 rows by 52k cols. Look in the first column for data about the first gene
 dim(fit$coefficients)
@@ -131,6 +148,10 @@ dim(fit$coefficients)
 fit$coefficients[,1]
 
 #what should I plot? Historgram or linear model? In video lecture about correcting for batch effects a histogram is plotted first. 
+
+#Update: it's a histogram of LM coefficients (for the outcome variable cancer?).  It's just their frequency. How many coefficients for different genes take on different values (i.e. slopes).  Most values have a zero slope (the expression count is uncorrelated with the outcome).  Some are highly negatively or positively correlated. 
+
+#You don't really fit data if you using a histogram.  Assume they want a linear plot. 
 
 # histogram would likely be gene expression level on y axis and num technical replicates n x-axis.  This would be the same setup for a linear model. 
 plot(pdata_bm$num.tech.reps, edata[1,])
@@ -145,4 +166,23 @@ library(ggplot2)
 df <- data.frame(ensg = edata[1,], num.tech.reps = pdata_bm$num.tech.reps)
 ggplot(data=df, aes(y=ensg, x = num.tech.reps)) + geom_point() + geom_smooth(method="lm", color="red", linetype=2, formula="y~x")
 ```
+
+4. Fit a linear model relating the first gene’s counts to the age of the person and the sex of the samples. What is the value and interpretation of the coefficient for age?
+
+Let's try fitting all genes just for fun.  
+```{r}
+options(na.action='na.pass')
+m4  <- model.matrix(~age + as.factor(gender), data=pdata_bm)
+#ft4 <- lm.fit(m4, t(edata), na.action='na.pass')
+lm4a <- lm(t(edata) ~ age + gender, data=pdata_bm, na.action = na.omit)
+```
+
+Now can we fit just the first gene? 
+
+```{r}
+gene1_4 <- edata[1,] 
+lm4 <- lm(gene1_4 ~ age + gender, data=pdata_bm, na.action = na.omit)
+tidy(lm4)
+```
+
 
