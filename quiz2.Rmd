@@ -173,8 +173,10 @@ Let's try fitting all genes just for fun.
 ```{r}
 options(na.action='na.pass')
 m4  <- model.matrix(~age + as.factor(gender), data=pdata_bm)
+# TODO: should I be using lmFit function instead? 
 #ft4 <- lm.fit(m4, t(edata), na.action='na.pass')
 lm4a <- lm(t(edata) ~ age + gender, data=pdata_bm, na.action = na.omit)
+
 ```
 
 Now can we fit just the first gene? 
@@ -184,5 +186,39 @@ gene1_4 <- edata[1,]
 lm4 <- lm(gene1_4 ~ age + gender, data=pdata_bm, na.action = na.omit)
 tidy(lm4)
 ```
+
+Question 5
+
+Load the Montgomery and Pickrell
+
+```{r question_5}
+# This should already have been loaded by work for other questions. 
+
+#con =url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/montpick_eset.RData")
+#load(file=con)
+#close(con)
+mp = montpick.eset
+pdata = pData(mp)
+edata = as.data.frame(exprs(mp))
+fdata = fData(mp)
+```
+
+
+Perform the `log2(data + 1)` transform. Then fit a regression model to each sample using population as the outcome. Do this using the **lm.fit** function (hint: don't forget the intercept). What is the dimension of the residual matrix, the effects matrix and the coefficients matrix?
+
+```{r}
+edata_q5 = log2(edata + 1)
+mm = model.matrix(~population, pdata) #every formula should have an implied intercept term. 
+fit = lm.fit(mm, t(edata_q5))
+summary(fit)
+dim(fit$coefficients)
+dim(fit$residuals)
+dim(fit$effects)
+```
+
+
+
+
+
 
 
