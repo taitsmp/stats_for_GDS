@@ -216,9 +216,55 @@ dim(fit$residuals)
 dim(fit$effects)
 ```
 
+Question 6.
+
+Given the data model in question 5, what is the effects matrix?
+
+Never heard of this before. Some references
+
+* https://docs.tibco.com/pub/enterprise-runtime-for-R/4.1.0/doc/html/Language_Reference/stats/lm.fit.html
+* https://astrostatistics.psu.edu/su07/R/html/stats/html/effects.html
+* https://genomicsclass.github.io/book/pages/qr_and_regression.html
+* https://stats.idre.ucla.edu/other/mult-pkg/introduction-to-linear-mixed-models/
+
+Related to QR decomposition. Possibly related to linear mixture models. 
+
+Does adding up the effects matrix across thr
+
+Best guess answer:  
+
+"The model coefficients for all samples for each gene, with the values for each gene stored in the columns of the matrix."
+
+Second guess
+
+"The estimated fitted values for all samples for each gene, with the values for each gene stored in the columns of the matrix."
 
 
+Question 7 
 
+Fit many regression models to the expression data where **age** is the outcome variable using the **lmFit** function from the **limma** package (hint: you may have to subset the expression data to the samples without missing values of age to get the model to fit). What is the coefficient for age for the 1,000th gene? Make a plot of the data and fitted values for this gene. Does the model fit well?
+
+```{r question_7_setup}
+
+bm = bodymap.eset
+edata = exprs(bm)
+pdata_bm=pData(bm)
+```
+
+```{r q7_filter}
+library(dplyr)
+
+#this gets  rid of the rows with age == NA
+pdb <- pdata_bm %>%
+  filter(!is.na(age))
+
+#you could use this to drop certain rows
+#newdata <- mydata[c(-3,-5)]
+
+bad_samples = which(is.na(pdata_bm$age))
+
+#now  remove the columns mentioned in bad_samples from edata. 
+```
 
 
 
