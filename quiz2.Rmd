@@ -10,6 +10,8 @@ library(SummarizedExperiment)
 library(Biobase)
 library(GenomicRanges)
 library(broom)
+library(limma)
+library(dplyr)
 ```
 
 ### PCA - Question 1
@@ -244,6 +246,12 @@ Question 7
 
 Fit many regression models to the expression data where **age** is the outcome variable using the **lmFit** function from the **limma** package (hint: you may have to subset the expression data to the samples without missing values of age to get the model to fit). What is the coefficient for age for the 1,000th gene? Make a plot of the data and fitted values for this gene. Does the model fit well?
 
+References - Limma / LmFit
+
+* http://genomicsclass.github.io/book/pages/bioc1_geneset_1.html
+* http://jtleek.com/genstats/inst/doc/02_11_many-regressions.html
+* http://jtleek.com/genstats/inst/doc/03_09_Calculating_statistics.html
+
 ```{r question_7_setup}
 
 bm = bodymap.eset
@@ -252,18 +260,19 @@ pdata_bm=pData(bm)
 ```
 
 ```{r q7_filter}
-library(dplyr)
 
 #this gets  rid of the rows with age == NA
-pdb <- pdata_bm %>%
-  filter(!is.na(age))
+#pdb <- pdata_bm %>%
+#  filter(!is.na(age))
 
-#you could use this to drop certain rows
-#newdata <- mydata[c(-3,-5)]
-
+#which rows or cols to drop
 bad_samples = which(is.na(pdata_bm$age))
 
-#now  remove the columns mentioned in bad_samples from edata. 
+pdataQ7 <- pdata_bm[-1*bad_samples,]
+edataQ7 <- edata[,-1*bad_samples]
+
+modQ7 <- model.matrix(~ age, pdataQ7) #note: age is a predictor variable not an outcome variable. 
+fitQ7 <- lmFit(edataQ7, modQ7)
 ```
 
 
