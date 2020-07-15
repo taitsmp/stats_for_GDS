@@ -273,7 +273,29 @@ edataQ7 <- edata[,-1*bad_samples]
 
 modQ7 <- model.matrix(~ age, pdataQ7) #note: age is a predictor variable not an outcome variable. 
 fitQ7 <- lmFit(edataQ7, modQ7)
+
+okc = fitQ7$coefficients[1000,]
+okc
+
 ```
 
 
+```{r q7_plot}
+edata1k = edataQ7[1000,]
+
+
+plot(pdataQ7$age, edata1k)
+abline(okc['(Intercept)'], okc['age'])
+
+```
+
+```{r q7_ggplot}
+#construct dataframe from pdataQ7$age and edata1k. 
+dfQ7 <- data.frame(expression = edata1k, age = pdataQ7$age)
+
+ggplot(dfQ7, aes(x=age, y=expression)) +
+  geom_point() + 
+  geom_abline(slope=okc['age'] , intercept=okc['(Intercept)'] )
+
+```
 
