@@ -299,3 +299,31 @@ ggplot(dfQ7, aes(x=age, y=expression)) +
 
 ```
 
+```{r q8_data}
+bm = bodymap.eset
+edataQ8 = exprs(bm)
+pdataQ8=pData(bm)
+```
+
+Fit many regression models to the expression data where **age** is the outcome variable and **tissue.type** is an adjustment variable using the **lmFit** function from the **limma** package (hint: you may have to subset the expression data to the samples without missing values of age to get the model to fit). What is wrong with this model?
+
+```{r q8_model}
+bs8 = which(is.na(pdata_bm$age))
+
+pdataQ8 <- pdataQ8[-1*bs8,]
+edataQ8 <- edataQ8[,-1*bs8]
+
+dim(edataQ8)
+dim(pdataQ8)
+
+modq8 <- model.matrix(age ~ tissue.type, pdataQ8)
+fitq8 <- lmFit(edataQ8, modq8)
+```
+
+Best answer: 
+
+Since **tissue.type** is a factor variable with many levels, this model has more coefficients to estimate per gene (18) than data points per gene (16).
+
+
+
+
