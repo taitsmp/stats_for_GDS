@@ -5,6 +5,15 @@ output: html_notebook
 
 ### Quiz 2
 
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("sva")
+
+```
+
+
 ```{r load}
 library(SummarizedExperiment)
 library(Biobase)
@@ -324,6 +333,27 @@ Best answer:
 
 Since **tissue.type** is a factor variable with many levels, this model has more coefficients to estimate per gene (18) than data points per gene (16).
 
+Question 9. 
+
+```{r}
+#assumes you loaded the MP dataset
+mp = montpick.eset
+pdata=pData(mp)
+
+library(dplyr)
+glimpse(pdata)
+
+pdata %>%
+  filter(study =="Pickrell", population == "CEU")
+```
+
+Each study only measured one population
+
+Question 10.
+
+Load the Bodymap data with the following command
+
+Set the seed using the command `set.seed(33353)` then estimate a single surrogate variable using the `sva` function after `log2(data + 1)` transforming the expression data, removing rows with rowMeans less than 1, and treating age as the outcome (hint: you may have to subset the expression data to the samples without missing values of age to get the model to fit). What is the correlation between the estimated surrogate for batch and age? Is the surrogate more highly correlated with `\verb|race|race or \verb|gender|gender`race or `gender`?
 
 
 
