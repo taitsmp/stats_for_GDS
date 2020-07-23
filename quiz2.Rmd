@@ -355,5 +355,18 @@ Load the Bodymap data with the following command
 
 Set the seed using the command `set.seed(33353)` then estimate a single surrogate variable using the `sva` function after `log2(data + 1)` transforming the expression data, removing rows with rowMeans less than 1, and treating age as the outcome (hint: you may have to subset the expression data to the samples without missing values of age to get the model to fit). What is the correlation between the estimated surrogate for batch and age? Is the surrogate more highly correlated with `\verb|race|race or \verb|gender|gender`race or `gender`?
 
+```{r q10_load} 
+library(sva)
+bm = bodymap.eset
+edata = exprs(bm)
+pdata_bm=pData(bm)
+set.seed(33353)
 
+```
+
+```{r q10}
+
+edataq10 = log2(edata + 1)
+edataq10 = edataq10[rowMeans(edataq10) >=  1] #this is wrong.  how to subset?
+```
 
