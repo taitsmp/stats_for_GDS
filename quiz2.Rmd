@@ -351,9 +351,17 @@ Each study only measured one population
 
 Question 10.
 
+
 Load the Bodymap data with the following command
 
-Set the seed using the command `set.seed(33353)` then estimate a single surrogate variable using the `sva` function after `log2(data + 1)` transforming the expression data, removing rows with rowMeans less than 1, and treating age as the outcome (hint: you may have to subset the expression data to the samples without missing values of age to get the model to fit). What is the correlation between the estimated surrogate for batch and age? Is the surrogate more highly correlated with `\verb|race|race or \verb|gender|gender`race or `gender`?
+Set the seed using the command `set.seed(33353)` then estimate a single surrogate variable using the `sva` function after `log2(data + 1)` transforming the expression data, removing rows with rowMeans less than 1, and treating age as the outcome (hint: you may have to subset the expression data to the samples without missing values of age to get the model to fit). 
+
+* What is the correlation between the estimated surrogate for batch and age? 
+* Is the surrogate more highly correlated with `race` or `gender`?
+
+### Resources
+
+* http://jtleek.com/genstats/inst/doc/02_13_batch-effects.html
 
 ```{r q10_load} 
 library(sva)
@@ -366,7 +374,18 @@ set.seed(33353)
 
 ```{r q10}
 
-edataq10 = log2(edata + 1)
-edataq10 = edataq10[rowMeans(edataq10) >=  1] #this is wrong.  how to subset?
+#remove missing age variables
+has_age  = which(!is.na(pdata_bm$age))
+pdataq10 = pdata_bm[has_age,]
+
+edata_lg2 = log2(edata + 1)
+edataq10 = edata_lg2[which(rowMeans(edata_lg2) >=  1), has_age ]
+
+#does this really treat age as the outcome?
+mAge <- model.matrix(~age, data=pdataq10)
+m0   <- model.matrix(~1, data=pdataq10)
+sva10 = sva(edataq10, mAge, m0, n.sv=1)
+
 ```
 
+I believe you can use the R^2 value for correlation b/c you have only one variable.  This might be wrong. 
