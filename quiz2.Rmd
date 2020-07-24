@@ -368,8 +368,6 @@ library(sva)
 bm = bodymap.eset
 edata = exprs(bm)
 pdata_bm=pData(bm)
-set.seed(33353)
-
 ```
 
 ```{r q10}
@@ -384,8 +382,20 @@ edataq10 = edata_lg2[which(rowMeans(edata_lg2) >=  1), has_age ]
 #does this really treat age as the outcome?
 mAge <- model.matrix(~age, data=pdataq10)
 m0   <- model.matrix(~1, data=pdataq10)
+set.seed(33353)
 sva10 = sva(edataq10, mAge, m0, n.sv=1)
 
 ```
 
 I believe you can use the R^2 value for correlation b/c you have only one variable.  This might be wrong. 
+
+
+```{r}
+summary(lm(sva10$sv ~ pdataq10$age))
+```
+```{r}
+cor(sva10$sv[,1], pdataq10$age)
+
+```
+
+Not getting any answers that are options in the multiple choice. 
