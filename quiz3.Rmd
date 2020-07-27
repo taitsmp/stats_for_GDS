@@ -1,0 +1,38 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+## Quiz 3
+
+
+```{r load}
+library(SummarizedExperiment)
+library(Biobase)
+library(GenomicRanges)
+library(broom)
+library(limma)
+library(dplyr)
+library(snpStats)
+```
+
+Question 1
+
+Load the example SNP data with the following code:
+
+```{r}
+data(for.exercise)
+use <- seq(1, ncol(snps.10), 10)
+sub.10 <- snps.10[,use]
+snpdata = sub.10@.Data
+status = subject.support$cc
+```
+
+
+Fit a linear model and a logistic regression model to the data for the 3rd SNP. What are the coefficients for the SNP variable? How are they interpreted? (Hint: Don't forget to recode the 0 values to NA for the SNP data)
+
+```{r}
+snp3 = snpdata[,3]
+lm(status ~ snp3) #these dimensions would line up. Do I need a dataframe? 
+```
+
