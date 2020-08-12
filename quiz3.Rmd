@@ -14,9 +14,15 @@ library(broom)
 library(limma)
 library(dplyr)
 library(snpStats)
+library(tidyr)
 ```
 
 Question 1
+
+Related Documentation
+
+* http://jtleek.com/genstats/inst/doc/03_04_GLMs.html
+* https://bioconductor.org/packages/release/bioc/vignettes/snpStats/inst/doc/data-input-vignette.pdf
 
 Load the example SNP data with the following code:
 
@@ -31,8 +37,31 @@ status = subject.support$cc
 
 Fit a linear model and a logistic regression model to the data for the 3rd SNP. What are the coefficients for the SNP variable? How are they interpreted? (Hint: Don't forget to recode the 0 values to NA for the SNP data)
 
-```{r}
-snp3 = snpdata[,3]
-lm(status ~ snp3) #these dimensions would line up. Do I need a dataframe? 
+```{r q1_ml}
+snp3 = as.numeric(snpdata[,3])
+snp3[snp3==0] = NA
+lm(status ~ snp3)  
 ```
 
+```{r q1_log}
+glm1 = glm(status ~ snp3,family="binomial")
+tidy(glm1)
+```
+
+
+Question 6
+
+Load the Montgomery and Pickrell eSet:
+
+
+```{r}
+con =url("http://bowtie-bio.sourceforge.net/recount/ExpressionSets/montpick_eset.RData")
+load(file=con)
+close(con)
+mp = montpick.eset
+pdata=pData(mp)
+edata=as.data.frame(exprs(mp))
+fdata = fData(mp)
+```
+
+Do the log2(data + 1) transform and fit calculate F-statistics for the difference between studies/populations using genefilter:rowFtests and using genefilter:rowttests. Do you get the same statistic? Do you get the same p-value?

@@ -1753,18 +1753,127 @@ summary {
 <h2>Quiz 3</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShTdW1tYXJpemVkRXhwZXJpbWVudClcbmxpYnJhcnkoQmlvYmFzZSlcbmxpYnJhcnkoR2Vub21pY1JhbmdlcylcbmxpYnJhcnkoYnJvb20pXG5saWJyYXJ5KGxpbW1hKVxubGlicmFyeShkcGx5cilcbmxpYnJhcnkoc25wU3RhdHMpXG5gYGAifQ== -->
-<pre class="r"><code>library(SummarizedExperiment)
-library(Biobase)
-library(GenomicRanges)
-library(broom)
-library(limma)
-library(dplyr)
-library(snpStats)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShTdW1tYXJpemVkRXhwZXJpbWVudClcbmBgYCJ9 -->
+<pre class="r"><code>library(SummarizedExperiment)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiTG9hZGluZyByZXF1aXJlZCBwYWNrYWdlOiBHZW5vbWljUmFuZ2VzXG5Mb2FkaW5nIHJlcXVpcmVkIHBhY2thZ2U6IElSYW5nZXNcbkxvYWRpbmcgcmVxdWlyZWQgcGFja2FnZTogR2Vub21lSW5mb0RiXG5Mb2FkaW5nIHJlcXVpcmVkIHBhY2thZ2U6IEJpb2Jhc2VcbldlbGNvbWUgdG8gQmlvY29uZHVjdG9yXG5cbiAgICBWaWduZXR0ZXMgY29udGFpbiBpbnRyb2R1Y3RvcnkgbWF0ZXJpYWw7IHZpZXcgd2l0aCAnYnJvd3NlVmlnbmV0dGVzKCknLiBUbyBjaXRlXG4gICAgQmlvY29uZHVjdG9yLCBzZWUgJ2NpdGF0aW9uKFwiQmlvYmFzZVwiKScsIGFuZCBmb3IgcGFja2FnZXMgJ2NpdGF0aW9uKFwicGtnbmFtZVwiKScuXG5cbkxvYWRpbmcgcmVxdWlyZWQgcGFja2FnZTogRGVsYXllZEFycmF5XG5Mb2FkaW5nIHJlcXVpcmVkIHBhY2thZ2U6IG1hdHJpeFN0YXRzXG5cbkF0dGFjaGluZyBwYWNrYWdlOiDigJhtYXRyaXhTdGF0c+KAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6QmlvYmFzZeKAmTpcblxuICAgIGFueU1pc3NpbmcsIHJvd01lZGlhbnNcblxuXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYRGVsYXllZEFycmF54oCZXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0cyBhcmUgbWFza2VkIGZyb20g4oCYcGFja2FnZTptYXRyaXhTdGF0c+KAmTpcblxuICAgIGNvbE1heHMsIGNvbE1pbnMsIGNvbFJhbmdlcywgcm93TWF4cywgcm93TWlucywgcm93UmFuZ2VzXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0cyBhcmUgbWFza2VkIGZyb20g4oCYcGFja2FnZTpiYXNl4oCZOlxuXG4gICAgYXBlcm0sIGFwcGx5LCByb3dzdW1cbiJ9 -->
+<pre><code>Loading required package: GenomicRanges
+Loading required package: IRanges
+Loading required package: GenomeInfoDb
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with 'browseVignettes()'. To cite
+    Bioconductor, see 'citation(&quot;Biobase&quot;)', and for packages 'citation(&quot;pkgname&quot;)'.
+
+Loading required package: DelayedArray
+Loading required package: matrixStats
+
+Attaching package: ‘matrixStats’
+
+The following objects are masked from ‘package:Biobase’:
+
+    anyMissing, rowMedians
+
+
+Attaching package: ‘DelayedArray’
+
+The following objects are masked from ‘package:matrixStats’:
+
+    colMaxs, colMins, colRanges, rowMaxs, rowMins, rowRanges
+
+The following objects are masked from ‘package:base’:
+
+    aperm, apply, rowsum</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShCaW9iYXNlKVxubGlicmFyeShHZW5vbWljUmFuZ2VzKVxubGlicmFyeShicm9vbSlcbmBgYCJ9 -->
+<pre class="r"><code>library(Biobase)
+library(GenomicRanges)
+library(broom)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2Qgb3ZlcndyaXR0ZW4gYnkgJ2RwbHlyJzpcbiAgbWV0aG9kICAgICAgICAgICBmcm9tXG4gIHByaW50LnJvd3dpc2VfZGYgICAgIFxuIn0= -->
+<pre><code>Registered S3 method overwritten by 'dplyr':
+  method           from
+  print.rowwise_df     </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShsaW1tYSlcbmBgYCJ9 -->
+<pre class="r"><code>library(limma)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYbGltbWHigJlcblxuVGhlIGZvbGxvd2luZyBvYmplY3QgaXMgbWFza2VkIGZyb20g4oCYcGFja2FnZTpCaW9jR2VuZXJpY3PigJk6XG5cbiAgICBwbG90TUFcbiJ9 -->
+<pre><code>
+Attaching package: ‘limma’
+
+The following object is masked from ‘package:BiocGenerics’:
+
+    plotMA</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShkcGx5cilcbmBgYCJ9 -->
+<pre class="r"><code>library(dplyr)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYZHBseXLigJlcblxuVGhlIGZvbGxvd2luZyBvYmplY3QgaXMgbWFza2VkIGZyb20g4oCYcGFja2FnZTptYXRyaXhTdGF0c+KAmTpcblxuICAgIGNvdW50XG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0IGlzIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6QmlvYmFzZeKAmTpcblxuICAgIGNvbWJpbmVcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOkdlbm9taWNSYW5nZXPigJk6XG5cbiAgICBpbnRlcnNlY3QsIHNldGRpZmYsIHVuaW9uXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0IGlzIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6R2Vub21lSW5mb0Ri4oCZOlxuXG4gICAgaW50ZXJzZWN0XG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0cyBhcmUgbWFza2VkIGZyb20g4oCYcGFja2FnZTpJUmFuZ2Vz4oCZOlxuXG4gICAgY29sbGFwc2UsIGRlc2MsIGludGVyc2VjdCwgc2V0ZGlmZiwgc2xpY2UsIHVuaW9uXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0cyBhcmUgbWFza2VkIGZyb20g4oCYcGFja2FnZTpTNFZlY3RvcnPigJk6XG5cbiAgICBmaXJzdCwgaW50ZXJzZWN0LCByZW5hbWUsIHNldGRpZmYsIHNldGVxdWFsLCB1bmlvblxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6QmlvY0dlbmVyaWNz4oCZOlxuXG4gICAgY29tYmluZSwgaW50ZXJzZWN0LCBzZXRkaWZmLCB1bmlvblxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6c3RhdHPigJk6XG5cbiAgICBmaWx0ZXIsIGxhZ1xuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6YmFzZeKAmTpcblxuICAgIGludGVyc2VjdCwgc2V0ZGlmZiwgc2V0ZXF1YWwsIHVuaW9uXG4ifQ== -->
+<pre><code>
+Attaching package: ‘dplyr’
+
+The following object is masked from ‘package:matrixStats’:
+
+    count
+
+The following object is masked from ‘package:Biobase’:
+
+    combine
+
+The following objects are masked from ‘package:GenomicRanges’:
+
+    intersect, setdiff, union
+
+The following object is masked from ‘package:GenomeInfoDb’:
+
+    intersect
+
+The following objects are masked from ‘package:IRanges’:
+
+    collapse, desc, intersect, setdiff, slice, union
+
+The following objects are masked from ‘package:S4Vectors’:
+
+    first, intersect, rename, setdiff, setequal, union
+
+The following objects are masked from ‘package:BiocGenerics’:
+
+    combine, intersect, setdiff, union
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShzbnBTdGF0cylcbmxpYnJhcnkodGlkeXIpXG5gYGAifQ== -->
+<pre class="r"><code>library(snpStats)
+library(tidyr)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYdGlkeXLigJlcblxuVGhlIGZvbGxvd2luZyBvYmplY3RzIGFyZSBtYXNrZWQgZnJvbSDigJhwYWNrYWdlOk1hdHJpeOKAmTpcblxuICAgIGV4cGFuZCwgcGFjaywgdW5wYWNrXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0IGlzIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6UzRWZWN0b3Jz4oCZOlxuXG4gICAgZXhwYW5kXG4ifQ== -->
+<pre><code>
+Attaching package: ‘tidyr’
+
+The following objects are masked from ‘package:Matrix’:
+
+    expand, pack, unpack
+
+The following object is masked from ‘package:S4Vectors’:
+
+    expand</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p>Question 1</p>
+<p>Related Documentation</p>
+<ul>
+<li><a href="http://jtleek.com/genstats/inst/doc/03_04_GLMs.html" class="uri">http://jtleek.com/genstats/inst/doc/03_04_GLMs.html</a></li>
+<li><a href="https://bioconductor.org/packages/release/bioc/vignettes/snpStats/inst/doc/data-input-vignette.pdf" class="uri">https://bioconductor.org/packages/release/bioc/vignettes/snpStats/inst/doc/data-input-vignette.pdf</a></li>
+</ul>
 <p>Load the example SNP data with the following code:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
@@ -1780,20 +1889,57 @@ status = subject.support$cc</code></pre>
 <p>Fit a linear model and a logistic regression model to the data for the 3rd SNP. What are the coefficients for the SNP variable? How are they interpreted? (Hint: Don’t forget to recode the 0 values to NA for the SNP data)</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc25wMyA9IHNucGRhdGFbLDNdXG5sbShzdGF0dXMgfiBzbnAzKSAjdGhlc2UgZGltZW5zaW9ucyB3b3VsZCBsaW5lIHVwLiBUaGlzIGZhXG5gYGAifQ== -->
-<pre class="r"><code>snp3 = snpdata[,3]
-lm(status ~ snp3) #these dimensions would line up. This fa</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc25wMyA9IGFzLm51bWVyaWMoc25wZGF0YVssM10pXG5zbnAzW3NucDM9PTBdID0gTkFcbmxtKHN0YXR1cyB+IHNucDMpICN0aGVzZSBkaW1lbnNpb25zIHdvdWxkIGxpbmUgdXAuIERvIEkgbmVlZCBhIGRhdGFmcmFtZT8gXG5gYGAifQ== -->
+<pre class="r"><code>snp3 = as.numeric(snpdata[,3])
+snp3[snp3==0] = NA
+lm(status ~ snp3) #these dimensions would line up. Do I need a dataframe? </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gbW9kZWwubWF0cml4LmRlZmF1bHQobXQsIG1mLCBjb250cmFzdHMpIDogXG4gIHZhcmlhYmxlcyBvZiB0eXBlICdyYXcnIGFyZSBub3QgYWxsb3dlZCBpbiBtb2RlbCBtYXRyaWNlc1xuIn0= -->
-<pre><code>Error in model.matrix.default(mt, mf, contrasts) : 
-  variables of type 'raw' are not allowed in model matrices</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IHN0YXR1cyB+IHNucDMpXG5cbkNvZWZmaWNpZW50czpcbihJbnRlcmNlcHQpICAgICAgICAgc25wMyAgXG4gICAgIDAuNTQ0MiAgICAgIC0wLjAzOTQgIFxuIn0= -->
+<pre><code>
+Call:
+lm(formula = status ~ snp3)
+
+Coefficients:
+(Intercept)         snp3  
+     0.5442      -0.0394  </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2xtMSA9IGdsbShzdGF0dXMgfiBzbnAzLGZhbWlseT1cImJpbm9taWFsXCIpXG50aWR5KGdsbTEpXG5gYGAifQ== -->
+<pre class="r"><code>glm1 = glm(status ~ snp3,family=&quot;binomial&quot;)
+tidy(glm1)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInRibF9kZiIsInRibCIsImRhdGEuZnJhbWUiXSwibmNvbCI6NSwibnJvdyI6Mn0sInJkZiI6Ikg0c0lBQUFBQUFBQUF3dHlpVERtaXVCaVlHQmdabUFCa2F4QWdvRTFOTVJOMTRLQmdZVUp5R0VFU25DQzZBcWd0REJJRm9nRmdKZ0pLc0d0NFpsWGtscVVuRnBRb2drVllpbk9LekFHMG53Z1pmYkgxdTI3czhhUGRmOFJjei9QL0xKWmNQRXo2ak8yTkJtcDJwOWd2OHZ1SFh3RUx2N3krS1dGVS9wYzlyOTZQUzN6Y3EwelhQeldpOFdxWjQ2WDI5K2M4ODc0UStSUE5QZXg1aVhtcGhaRDNjWUtjd2pRWWJsUU5rZHFjVWxtYm1KSktwVFBXVnlTb3BkYVZKUmZoQkJJTE1rRUtrcUdDckFYNkpVbDVwU21vdG5FV1pSZnJnZXpqUmZrdEFZZzhmLy8vMy9vVGtyT1NTeUdPUWtteUpXU1dKS29sMVlFMUEva29XdGh6eThveWN6UEEycGlRZzVyZUNRVW9RbXdGUnJHNStTbmc4d0ZpMElBTDVUTmhNUm1oZGpFOUI4dGlOaFM4OUl6ODJDQndwcVRtSlNhQStYd0FUMEs5cWRlUVZGbVhnbk1BMERSWXIyUy9KSkVtRHF1NVB3Y21BallTd3ovQVAxWmROTlpBZ0FBIn0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"(Intercept)","2":"0.1772078","3":"0.2199584","4":"0.8056424","5":"0.4204491"},{"1":"snp3","2":"-0.1579378","3":"0.1877400","4":"-0.8412582","5":"0.4002033"}],"options":{"columns":{"min":{},"max":[10],"total":[5]},"rows":{"min":[10],"max":[10],"total":[2]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Question 6</p>
+<p>Load the Montgomery and Pickrell eSet:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29uID11cmwoXCJodHRwOi8vYm93dGllLWJpby5zb3VyY2Vmb3JnZS5uZXQvcmVjb3VudC9FeHByZXNzaW9uU2V0cy9tb250cGlja19lc2V0LlJEYXRhXCIpXG5sb2FkKGZpbGU9Y29uKVxuY2xvc2UoY29uKVxubXAgPSBtb250cGljay5lc2V0XG5wZGF0YT1wRGF0YShtcClcbmVkYXRhPWFzLmRhdGEuZnJhbWUoZXhwcnMobXApKVxuZmRhdGEgPSBmRGF0YShtcClcbmBgYCJ9 -->
+<pre class="r"><code>con =url(&quot;http://bowtie-bio.sourceforge.net/recount/ExpressionSets/montpick_eset.RData&quot;)
+load(file=con)
+close(con)
+mp = montpick.eset
+pdata=pData(mp)
+edata=as.data.frame(exprs(mp))
+fdata = fData(mp)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Do the log2(data + 1) transform and fit calculate F-statistics for the difference between studies/populations using genefilter:rowFtests and using genefilter:rowttests. Do you get the same statistic? Do you get the same p-value?</p>
+<!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMgUXVpeiAzCgoKYGBge3IgbG9hZH0KbGlicmFyeShTdW1tYXJpemVkRXhwZXJpbWVudCkKbGlicmFyeShCaW9iYXNlKQpsaWJyYXJ5KEdlbm9taWNSYW5nZXMpCmxpYnJhcnkoYnJvb20pCmxpYnJhcnkobGltbWEpCmxpYnJhcnkoZHBseXIpCmxpYnJhcnkoc25wU3RhdHMpCmBgYAoKUXVlc3Rpb24gMQoKTG9hZCB0aGUgZXhhbXBsZSBTTlAgZGF0YSB3aXRoIHRoZSBmb2xsb3dpbmcgY29kZToKCmBgYHtyfQpkYXRhKGZvci5leGVyY2lzZSkKdXNlIDwtIHNlcSgxLCBuY29sKHNucHMuMTApLCAxMCkKc3ViLjEwIDwtIHNucHMuMTBbLHVzZV0Kc25wZGF0YSA9IHN1Yi4xMEAuRGF0YQpzdGF0dXMgPSBzdWJqZWN0LnN1cHBvcnQkY2MKYGBgCgoKRml0IGEgbGluZWFyIG1vZGVsIGFuZCBhIGxvZ2lzdGljIHJlZ3Jlc3Npb24gbW9kZWwgdG8gdGhlIGRhdGEgZm9yIHRoZSAzcmQgU05QLiBXaGF0IGFyZSB0aGUgY29lZmZpY2llbnRzIGZvciB0aGUgU05QIHZhcmlhYmxlPyBIb3cgYXJlIHRoZXkgaW50ZXJwcmV0ZWQ/IChIaW50OiBEb24ndCBmb3JnZXQgdG8gcmVjb2RlIHRoZSAwIHZhbHVlcyB0byBOQSBmb3IgdGhlIFNOUCBkYXRhKQoKYGBge3J9CnNucDMgPSBzbnBkYXRhWywzXQpsbShzdGF0dXMgfiBzbnAzKSAjdGhlc2UgZGltZW5zaW9ucyB3b3VsZCBsaW5lIHVwLiBEbyBJIG5lZWQgYSBkYXRhZnJhbWU/IApgYGAKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyMgUXVpeiAzCgoKYGBge3IgbG9hZH0KbGlicmFyeShTdW1tYXJpemVkRXhwZXJpbWVudCkKbGlicmFyeShCaW9iYXNlKQpsaWJyYXJ5KEdlbm9taWNSYW5nZXMpCmxpYnJhcnkoYnJvb20pCmxpYnJhcnkobGltbWEpCmxpYnJhcnkoZHBseXIpCmxpYnJhcnkoc25wU3RhdHMpCmxpYnJhcnkodGlkeXIpCmBgYAoKUXVlc3Rpb24gMQoKUmVsYXRlZCBEb2N1bWVudGF0aW9uCgoqIGh0dHA6Ly9qdGxlZWsuY29tL2dlbnN0YXRzL2luc3QvZG9jLzAzXzA0X0dMTXMuaHRtbAoqIGh0dHBzOi8vYmlvY29uZHVjdG9yLm9yZy9wYWNrYWdlcy9yZWxlYXNlL2Jpb2MvdmlnbmV0dGVzL3NucFN0YXRzL2luc3QvZG9jL2RhdGEtaW5wdXQtdmlnbmV0dGUucGRmCgpMb2FkIHRoZSBleGFtcGxlIFNOUCBkYXRhIHdpdGggdGhlIGZvbGxvd2luZyBjb2RlOgoKYGBge3J9CmRhdGEoZm9yLmV4ZXJjaXNlKQp1c2UgPC0gc2VxKDEsIG5jb2woc25wcy4xMCksIDEwKQpzdWIuMTAgPC0gc25wcy4xMFssdXNlXQpzbnBkYXRhID0gc3ViLjEwQC5EYXRhCnN0YXR1cyA9IHN1YmplY3Quc3VwcG9ydCRjYwpgYGAKCgpGaXQgYSBsaW5lYXIgbW9kZWwgYW5kIGEgbG9naXN0aWMgcmVncmVzc2lvbiBtb2RlbCB0byB0aGUgZGF0YSBmb3IgdGhlIDNyZCBTTlAuIFdoYXQgYXJlIHRoZSBjb2VmZmljaWVudHMgZm9yIHRoZSBTTlAgdmFyaWFibGU/IEhvdyBhcmUgdGhleSBpbnRlcnByZXRlZD8gKEhpbnQ6IERvbid0IGZvcmdldCB0byByZWNvZGUgdGhlIDAgdmFsdWVzIHRvIE5BIGZvciB0aGUgU05QIGRhdGEpCgpgYGB7ciBxMV9tbH0Kc25wMyA9IGFzLm51bWVyaWMoc25wZGF0YVssM10pCnNucDNbc25wMz09MF0gPSBOQQpsbShzdGF0dXMgfiBzbnAzKSAgCmBgYAoKYGBge3IgcTFfbG9nfQpnbG0xID0gZ2xtKHN0YXR1cyB+IHNucDMsZmFtaWx5PSJiaW5vbWlhbCIpCnRpZHkoZ2xtMSkKYGBgCgoKUXVlc3Rpb24gNgoKTG9hZCB0aGUgTW9udGdvbWVyeSBhbmQgUGlja3JlbGwgZVNldDoKCgpgYGB7cn0KY29uID11cmwoImh0dHA6Ly9ib3d0aWUtYmlvLnNvdXJjZWZvcmdlLm5ldC9yZWNvdW50L0V4cHJlc3Npb25TZXRzL21vbnRwaWNrX2VzZXQuUkRhdGEiKQpsb2FkKGZpbGU9Y29uKQpjbG9zZShjb24pCm1wID0gbW9udHBpY2suZXNldApwZGF0YT1wRGF0YShtcCkKZWRhdGE9YXMuZGF0YS5mcmFtZShleHBycyhtcCkpCmZkYXRhID0gZkRhdGEobXApCmBgYAoKRG8gdGhlIGxvZzIoZGF0YSArIDEpIHRyYW5zZm9ybSBhbmQgZml0IGNhbGN1bGF0ZSBGLXN0YXRpc3RpY3MgZm9yIHRoZSBkaWZmZXJlbmNlIGJldHdlZW4gc3R1ZGllcy9wb3B1bGF0aW9ucyB1c2luZyBnZW5lZmlsdGVyOnJvd0Z0ZXN0cyBhbmQgdXNpbmcgZ2VuZWZpbHRlcjpyb3d0dGVzdHMuIERvIHlvdSBnZXQgdGhlIHNhbWUgc3RhdGlzdGljPyBEbyB5b3UgZ2V0IHRoZSBzYW1lIHAtdmFsdWU/</div>
 
 
 
